@@ -464,15 +464,17 @@ Remember: if command character would be used as key in `options`, it functionali
 
 Real example from [Enigmatica2: Expert - Extended](https://github.com/Krutoy242/Enigmatica2Expert-Extended/blob/0c2cedfd20025fb6bf1b71fd26b8a7c4d215aa6a/scripts/Creative.zs#L455-L466):
 
+<sub><sup>(some characters was replaced because i use "Fira Code" and github using "SFMono-Regular")</sup></sub>
+
 ```zs
 # Mekanism Creative Energy
 var creativeCube = <mekanism:energycube>.withTag({tier:4,mekData:{energyStored:1.7976931348623157E308}});
 craft.make(creativeCube, ["pretty",
 	"◘ ◘ ◙ ◙ τ . . . .",
-	"◘ ◊ V ▩ ▩ . . . .",
-	"☠ V W ◽ ⁵ . . . .",
-	"☠ ▨ ◽ ■ ☹ . . . .",
-	"κ ▨ ⁵ ⫲ X . . . .",
+	"◘ ◊ V □ □ . . . .",
+	"Ψ V W ◽ ⁵ . . . .",
+	"Ψ ⌂ ◽ ■ ☻ . . . .",
+	"κ ⌂ ⁵ ⫲ X . . . .",
 	". . . . . . . . .",
 	". . . . . . . . .",
 	". . . . . . . . .",
