@@ -17,10 +17,10 @@ Drop content of [scripts/](scripts/) into your Minecraft 1.12 `scripts/` folder.
 
 1. Change scripts `#priority` if needed
 2. Some scripts creating global variables. You should manually handle this if your scripts have globals with same name
-   * global `serialize` - [serialize.zs](serialize.zs)
-   * global `utils` - [utils.zs](utils.zs)
-   * global `craft` - [craft.zs](craft/craft.zs)
-3. [craft.zs](craft/craft.zs) have predefined code for mod `ExtendedCrafting`. If you haven't it, follow instructions in this file.
+   * global `serialize` - [serialize.zs](scripts/serialize.zs)
+   * global `utils` - [utils.zs](scripts/utils.zs)
+   * global `craft` - [craft.zs](scripts/craft/craft.zs)
+3. [craft.zs](scripts/craft/craft.zs) have predefined code for mod `ExtendedCrafting`. If you haven't it, follow instructions in this file.
 
 
 > ## Usage
