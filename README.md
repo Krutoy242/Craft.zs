@@ -4,9 +4,8 @@ A [ZenScript](https://docs.blamejared.com/) scripts for fancy working with Craft
 <img src="https://i.imgur.com/yhmRZTM.gif">
 
 
-<br>
-<br>
-
+---
+---
 
 > ## Installation
 
@@ -18,8 +17,8 @@ Drop content of [scripts/](scripts/) into your Minecraft 1.12 `scripts/` folder.
 1. Change scripts `#priority` if needed
 2. Some scripts creating global variables. You should manually handle this if your scripts have globals with same name
    * global `serialize` - [serialize.zs](scripts/serialize.zs)
-   * global `utils` - [utils.zs](scripts/utils.zs)
    * global `craft` - [craft.zs](scripts/craft/craft.zs)
+   * global `utils` and `Bucket` - [utils.zs](scripts/utils.zs)
 3. [craft.zs](scripts/craft/craft.zs) have predefined code for mod `ExtendedCrafting`. If you haven't it, follow instructions in this file.
 
 
@@ -27,7 +26,7 @@ Drop content of [scripts/](scripts/) into your Minecraft 1.12 `scripts/` folder.
 
 1. In MC lay out your crafting recipe in an block inventory
 2. Put recipe output in 1st player's inventory slot
-3. Right-Click inventory with Feather
+3. Right-Click inventory with **Bone**
 4. Generated code can be found in `crafttweaker.log` file
 
 <img src="https://i.imgur.com/ImRljJB.png" height=170>
@@ -61,26 +60,14 @@ List of valid inventories can be found in [recipeInventory.zs](scripts/craft/hel
 <img src="https://i.imgur.com/WtiocV5.png" width="340">
 
 
-### Feather right-click
-You must be in creative `/gamemode 1` to use **Feather**.
+### Bone right-click
 
-Alternatively, you could use **Bone** or **Stick** to create recipes.
+You must be in creative `/gamemode 1` to use **Bone**.
 
-**Bone** would not include comments with item names
-```zs
-"▬": <extendedcrafting:material:36> # Ender Ingot
-```
-**Stick** would not add spaces between letters
-```zs
-# Feather:
-"I ♥ Y"
-"i F F"
+**Bone** a.k.a "Recipe tool" can be changed from bone to any item in [helper.zs](scripts/helper/helper.zs).  
+Also there you can find option to only item with NBT tag would cause triggers.
 
-# Stick:
-"I♥Y"
-"iFF"
-```
-<sub><sup>Note that spaced variant have `"pretty"` keyword as first element of string grid</sup></sub>
+**Recipe tool** can be configured with NBT tags. See [helper_jei.zs](scripts/helper/helper_jei.zs).
 
 
 **Shift+RightClick** will merge inventory together, so they would use same items in recipes
@@ -111,7 +98,7 @@ craft.remake(<tconstruct:tooltables>, ["w"], ingrs);
 
 > ##  Methods
 
-Using Feather to make recipes is just "helper". Some functions you can use manually in code.
+Using **Bone** to make recipes is just "helper". Some functions you can use manually in code.
 
 
 
