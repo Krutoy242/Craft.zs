@@ -64,10 +64,10 @@ List of valid inventories can be found in [recipeInventory.zs](scripts/craft/hel
 
 You must be in creative `/gamemode 1` to use **Bone**.
 
-**Bone** a.k.a "Recipe tool" can be changed from bone to any item in [helper.zs](scripts/helper/helper.zs).  
+**Bone** a.k.a "Recipe tool" can be changed from bone to any item in [helper.zs](scripts/craft/helper/helper.zs).  
 Also there you can find option to only item with NBT tag would cause triggers.
 
-**Recipe tool** can be configured with NBT tags. See [helper_jei.zs](scripts/helper/helper_jei.zs).
+**Recipe tool** can be configured with NBT tags. See [helper_jei.zs](scripts/craft/helper/helper_jei.zs).
 
 
 **Shift+RightClick** will merge inventory together, so they would use same items in recipes
