@@ -96,13 +96,13 @@ zenClass RecipeInventory {
   function getSlotData(slot as int) as IData {
     if(H==0) return {};
 
-    val _x = slot % W; //127%26 = 23
+    val _x = slot % W;
     val gridWidth = (W / 4) as int;
     if(_x >= W - (W%4)) return null;
 
-    val _y = (slot / W) as int; // 127/26 = 4.884615
-    val netX = (_x/4) as int; // 23/4 = 5.75
-    val netY = (_y/3) as int; // 4/3 = 1.333333
+    val _y = (slot / W) as int;
+    val netX = (_x/4) as int;
+    val netY = (_y/3) as int;
     val gridIndex = netY * gridWidth + netX;
 
     val x = _x % 4;
