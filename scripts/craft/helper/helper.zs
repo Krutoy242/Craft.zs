@@ -111,7 +111,7 @@ zenClass RecipeWork { zenConstructor() {}
     for pos, recipeInventory in inventories {
       str = str + recipeInventory.toString(newStyle);
     }
-    var result = utils.join(str, style has "noFancy" ? "\n" : "\n\n");
+    var result = serialize.join(str, style has "noFancy" ? "\n" : "\n\n");
 
     if(merged) result = "val ingrs = {\n" ~
       serialize.IIngredient_string_(getMergedMap(), style) ~ "\n" ~ 

@@ -25,29 +25,6 @@ zenClass Utils {
     }
     return sorted;
   }
-
-
-  function repeat(n as int) as string {return repeat(" ", n);}
-  function repeat(s as string, n as int) as string {
-    if(n<=0) return "";
-    var str = "";
-    for i in 0 to n {
-      str += s;
-    }
-    return str;
-  }
-
-  function join(arr as string[]) as string { return join(arr, "\n"); }
-  function join(arr as string[], delimiter as string) as string {
-    var first = true;
-    var s = "";
-    for str in arr {
-      val d = !first ? delimiter: "";
-      first = false;
-      s += d ~ str;
-    }
-    return s;
-  }
 }
 global utils as Utils = Utils();
 

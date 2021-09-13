@@ -15,8 +15,31 @@ zenClass Serialize {
   function     wrap(s as string, wraps as string) as string { return wraps[0]~s~wraps[1]; }
   function     wrap(s as string)   as string { return wrap(s, '""'); }
   function  _string(s as string)   as string { return wrap(s); }
-  function string__(s as string[]) as string { return wrap(utils.join(s, ", "), "[]"); }
-  function     args(s as string[]) as string { return wrap(utils.join(s, ", "), '()'); }
+  function string__(s as string[]) as string { return wrap(join(s, ", "), "[]"); }
+  function     args(s as string[]) as string { return wrap(join(s, ", "), '()'); }
+
+  function repeat(n as int) as string {return repeat(" ", n);}
+  function repeat(s as string, n as int) as string {
+    if(n<=0) return "";
+    if(n==1) return s;
+    var str = "";
+    for i in 0 to n {
+      str += s;
+    }
+    return str;
+  }
+
+  function join(arr as string[]) as string { return join(arr, "\n"); }
+  function join(arr as string[], delimiter as string) as string {
+    var first = true;
+    var s = "";
+    for str in arr {
+      val d = !first ? delimiter: "";
+      first = false;
+      s += d ~ str;
+    }
+    return s;
+  }
 
   function IIngredient(a as IIngredient) as string { return !isNull(a) ? a.commandString : 'null'; }
   function IIngredient(a as crafttweaker.item.IIngredient, style as string[]) as string {
@@ -88,7 +111,7 @@ zenClass Serialize {
         if(q==0) {
           if(s_line.length < 50) maxLength = max(maxLength, s_line.length);
         } else {
-          val fancyPad = utils.repeat(isDense ? 0 : maxLength - s_line.length);
+          val fancyPad = repeat(isDense ? 0 : maxLength - s_line.length);
           val displayName = ingr.itemArray[0].displayName;
           val comment = (style has "noFancy") ? "" :
             fancyPad ~ comment_start ~ displayName ~ comment_end;
