@@ -130,6 +130,7 @@ zenClass Grid {
     # Make ingredients list from string grid
     shapedList = [[]];
     for y, row in map {
+      if(row.length==0) continue;
       for x in 0 to row.length {
         if (shapedList.length <= y) shapedList += [] as IIngredient[];
         shapedList[y] = shapedList[y] + opts[row[x]];
@@ -146,6 +147,7 @@ zenClass Grid {
     # Make ingredients list from string grid
     shapelessList = [];
     for y, row in map {
+      if(row.length==0) continue;
       for x in 0 to row.length {
         # Add ingredient in list
         var ingr = opts[row[x]];
