@@ -15,6 +15,8 @@ zenClass Serialize {
   function     wrap(s as string, wraps as string) as string { return wraps[0]~s~wraps[1]; }
   function     wrap(s as string)   as string { return wrap(s, '""'); }
   function  _string(s as string)   as string { return wrap(s); }
+  function string__(s as string[]) as string { return wrap(utils.join(s, ", "), "[]"); }
+  function     args(s as string[]) as string { return wrap(utils.join(s, ", "), '()'); }
 
   function IIngredient(a as IIngredient) as string { return !isNull(a) ? a.commandString : 'null'; }
   function IIngredient(a as crafttweaker.item.IIngredient, style as string[]) as string {
@@ -52,6 +54,12 @@ zenClass Serialize {
 
   function IItemStack(a as IItemStack) as string {
     return !isNull(a) ? a.commandString : 'null';
+  }
+
+  function IItemStack__(a as crafttweaker.item.IItemStack[]) as string {
+    var s = [] as string[];
+    for k,v in a { s += IItemStack(v); }
+    return string__(s);
   }
 
   function IIngredient_string_(ingrList as crafttweaker.item.IIngredient[string], style as string[]) as string {
@@ -94,6 +102,54 @@ zenClass Serialize {
     }
 
     return s;
+  }
+
+  function IIngredient__(a as crafttweaker.item.IIngredient[]) as string {
+    var s = [] as string[];
+    for k,v in a { s += IIngredient(v); }
+    return string__(s);
+  }
+
+  function IIngredient____(a as crafttweaker.item.IIngredient[][]) as string {
+    var s = [] as string[];
+    for k,v in a { s += IIngredient__(v); }
+    return string__(s);
+  }
+
+  function ILiquidStack(a as crafttweaker.liquid.ILiquidStack) as string {
+    return !isNull(a) ? ("<fluid:"~a.name~">" ~ (a.amount>1 ? " * " ~ a.amount : "")) : 'null';
+  }
+
+  function ILiquidStack__(a as crafttweaker.liquid.ILiquidStack[]) as string {
+    var s = [] as string[];
+    for k,v in a {
+      s += ILiquidStack(v);
+    }
+    return string__(s);
+  }
+
+  function ILiquidDefinition(a as ILiquidDefinition) as string {
+    return !isNull(a) ? ("<fluid:"~a.name~">") : 'null';
+  }
+
+  function WeightedItemStack(a as WeightedItemStack) as string {
+    return !isNull(a) ? ('('~a.stack.commandString~').weight('~a.percent~')') : 'null';
+  }
+
+  function WeightedItemStack__(ss as crafttweaker.item.WeightedItemStack[]) as string {
+    var s = [] as string[];
+    for k,v in ss {
+      s += WeightedItemStack(v);
+    }
+    return string__(s);
+  }
+
+  function IOreDictEntry(a as IOreDictEntry) as string {
+    return !isNull(a) ? ("<ore:"~a.name~">") : 'null';
+  }
+
+  function IBlock(a as IBlock) as string {
+    return !isNull(a) ? (a.definition.defaultState.commandString) : 'null';
   }
 }
 global serialize as Serialize = Serialize();
