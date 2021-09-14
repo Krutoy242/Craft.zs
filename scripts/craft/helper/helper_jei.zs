@@ -20,9 +20,10 @@ dense         : Always pack recipe in one line
 Style tags related to ingredients:
 
 noForceAmount : Disable foce transforming ingredients based on their amount
-noTransformers: No .anyDamage() if ingredient can have damage
 noOre         : Not replace ingredients with OreDict entries
 firstOre      : Only use first OreDict entry if there is many
+noTransformers: No `.anyDamage()` or `.withTag({})` if ingredient
+                can have damage or have default NBT tags
 
 */
 

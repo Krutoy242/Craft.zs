@@ -68,12 +68,12 @@ zenClass Serialize {
       return IIngredient(ingr);
     }
 
-    if(
-      itemStack.isDamageable &&
-      !(style has "noTransformers")
-    ) {
-      return IItemStack(itemStack, ".anyDamage()");
+    if(!(style has "noTransformers")) {
+      if(itemStack.isDamageable) return IItemStack(itemStack, ".anyDamage()");
+      if(itemStack.hasTag && itemStack.definition.makeStack(itemStack.damage).hasTag)
+        return IItemStack(itemStack.withEmptyTag());
     }
+
     return IIngredient(a);
   }
 
