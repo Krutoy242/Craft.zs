@@ -152,7 +152,7 @@ zenClass Grid {
         # Add ingredient in list
         var ingr = opts[row[x]];
         if (!isNull(ingr)) {
-          shapelessList = shapelessList + ingr;
+          shapelessList += ingr;
         }
       }
     }
@@ -221,15 +221,16 @@ zenClass Grid {
   function toString(_style as string[]) as string {
     val style as string[] = isNull(_style) ? [] : _style;
 
-    val isDense = (style has "dense");
-    val isPretty = !(style has "noPretty") && !isDense;
+    val isDense     =  (style has "dense");
+    val isShapeless =  (style has "shapeless");
+    val isPretty    = !isShapeless && !isDense && !(style has "noPretty");
     val ln   = isDense ? "" : "\n";
     val dlim = (isDense ? ", " : ",") ~ ln;
 
     # "pretty" prefix
-    var s = "[";
+    var s = isShapeless?'"':"[";
     if(isPretty) s +='"pretty"' ~ dlim;
-    else s += ln;
+    else if(!isShapeless) s += ln;
 
     # 2d Grid
     if(isNull(map)) 
@@ -238,15 +239,19 @@ zenClass Grid {
       s += "<no grid letters match options>";
     else
       for y, row in map {
-        var l = "";
-        if(y!=0) l = dlim;
-        if(!isDense) l += "  ";
-        l += serialize._string(isPretty
-          ? row.replaceAll("(.)(?!$)", "$1 ")
-          : row);
-        s += l;
+        if(isShapeless) {
+          s += isNull(opts[" "]) ? row.replaceAll(" ", "") : row;
+        } else {
+          var l = "";
+          if(y!=0) l = dlim;
+          if(!isDense) l += "  ";
+          l += serialize._string(isPretty
+            ? row.replaceAll("(.)(?!$)", "$1 ")
+            : row);
+          s += l;
+        }
       }
-    s += "]";
+    s += isShapeless?'"':"]";
 
     # Add Ingredients Table
     if(!(style has "noMap")) {

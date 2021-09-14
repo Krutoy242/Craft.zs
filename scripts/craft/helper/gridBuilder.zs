@@ -4,12 +4,21 @@ import scripts.craft.grid.Grid;
 import scripts.craft.helper.characterManager.CharacterManager;
 #priority 3
 
-zenClass GridBuilder { zenConstructor() {}
+
+zenClass GridBuilder {
+
+  # This items in catalyst slot would add this styles
+  val catalystsStyles as string[IIngredient] = {
+    <minecraft:glass_pane>  : "shapeless",
+    <minecraft:iron_nugget> : "removeByRecipeName",
+  } as string[IIngredient];
+
   var grid2d as IIngredient[][] = [];
   var haveData as bool = false;
   var maxX as int = 0;
   var maxY as int = 0;
   var mergedMap as IIngredient[string] = null;
+  var localStyle as string[] = null;
 
   # Calculated fields
   var map as IIngredient[string] = null;
@@ -18,7 +27,11 @@ zenClass GridBuilder { zenConstructor() {}
   var isBuilt as bool = false;
 
 
-  function insert(ingr as IIngredient, slot as int, w as int, style as string[]) {
+  zenConstructor(style as string[]) {
+    localStyle = style;
+  }
+
+  function insert(ingr as IIngredient, slot as int, w as int) {
     val x = slot % w;
     val y = (slot / w) as int;
     maxX = max(maxX, x+1);
@@ -36,9 +49,9 @@ zenClass GridBuilder { zenConstructor() {}
     } else {
       val itemStack = ingr.itemArray[0];
       if(
-        style has "noForceAmount" 
+        localStyle has "noForceAmount" 
         || ingr.amount == 1
-        || (serialize.IIngredient(ingr, style) != serialize.IIngredient(itemStack.anyAmount(), style))
+        || (serialize.IIngredient(ingr, localStyle) != serialize.IIngredient(itemStack.anyAmount(), localStyle))
       ) grid2d[y][x] = ingr;
       else {
         grid2d[y][x] = ingr.amount == 2 ? itemStack.anyAmount() as IIngredient
@@ -46,6 +59,17 @@ zenClass GridBuilder { zenConstructor() {}
                     : ingr);
       }
       haveData = true;
+    }
+  }
+
+  function insertCatalyst(ingr as IIngredient) as void {
+    if(isNull(ingr)) return;
+
+    for catl, newStyle in catalystsStyles {
+      if(catl has ingr || ingr has catl) {
+        localStyle += newStyle;
+        return;
+      }
     }
   }
 

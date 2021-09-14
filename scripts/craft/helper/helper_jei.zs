@@ -7,7 +7,7 @@
 Configure your tool, by giving yourself bone with NBT tag.
 use command:
 
-/give @p bone 1 0 {style: "tags_with_spaced_between"}
+/give @p bone 1 0 {style: "tags with spaces between"}
 
 Avaliable style tags:
 
