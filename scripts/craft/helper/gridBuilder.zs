@@ -18,7 +18,7 @@ zenClass GridBuilder { zenConstructor() {}
   var isBuilt as bool = false;
 
 
-  function insert(item as IIngredient, slot as int, w as int) {
+  function insert(ingr as IIngredient, slot as int, w as int, style as string[]) {
     val x = slot % w;
     val y = (slot / w) as int;
     maxX = max(maxX, x+1);
@@ -31,8 +31,22 @@ zenClass GridBuilder { zenConstructor() {}
       }
     }
 
-    grid2d[y][x] = item;
-    if (!isNull(item)) haveData = true;
+    if(isNull(ingr)) {
+      grid2d[y][x] = null;
+    } else {
+      val itemStack = ingr.itemArray[0];
+      if(
+        style has "noForceAmount" 
+        || ingr.amount == 1
+        || (serialize.IIngredient(ingr, style) != serialize.IIngredient(itemStack.anyAmount(), style))
+      ) grid2d[y][x] = ingr;
+      else {
+        grid2d[y][x] = ingr.amount == 2 ? itemStack.anyAmount() as IIngredient
+                    : (ingr.amount == 3 ? itemStack.anyAmount().withTag(null).withDamage(32767) as IIngredient
+                    : ingr);
+      }
+      haveData = true;
+    }
   }
 
   function writeToMap(map_weight as int[IIngredient]) {

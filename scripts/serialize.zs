@@ -43,40 +43,49 @@ zenClass Serialize {
 
   function IIngredient(a as IIngredient) as string { return !isNull(a) ? a.commandString : 'null'; }
   function IIngredient(a as crafttweaker.item.IIngredient, style as string[]) as string {
-    if(a.itemArray.length == 1) {
-      val itemStack = a.itemArray[0];
+    if(a.itemArray.length != 1) return IIngredient(a);
 
-      if(
-        itemStack.isDamageable &&
-        !isNull(style) &&
-        !(style has "noTransformers")
-      ) {
-        if(itemStack.amount > 1) return "("~IItemStack(itemStack) ~ ").anyDamage()";
-        return IItemStack(itemStack) ~ ".anyDamage()";
-      }
+    var itemStack = a.itemArray[0];
 
-      if(style has "noOre") return IItemStack(itemStack);
+    if(!(style has "noForceAmount")) {
+      if(itemStack.amount == 2) return IItemStack(itemStack.anyAmount());
+      if(itemStack.amount == 3) return IItemStack(itemStack.anyAmount().withTag(null).withDamage(32767));
+    }
 
-      val ores = itemStack.ores;
-      if(!isNull(ores) && ores.length > 0) {
-        val first = itemStack.amount > 1 ? ores[0] * itemStack.amount : ores[0];
-        if(ores.length == 1 || style has "firstOre") return IIngredient(first);
-        
-        var ingr as crafttweaker.item.IIngredient = ores[0];
-        for i, ore in ores {
-          if(i==0) continue;
-          ingr |= ore;
-        }
-        if(itemStack.amount > 1) ingr *= itemStack.amount;
-        return IIngredient(ingr);
-      }
+    if(style has "noOre") return IItemStack(itemStack);
+
+    val ores = itemStack.ores;
+    if(!isNull(ores) && ores.length > 0) {
+      val first = itemStack.amount > 1 ? ores[0] * itemStack.amount : ores[0];
+      if(ores.length == 1 || style has "firstOre") return IIngredient(first);
       
+      var ingr as crafttweaker.item.IIngredient = ores[0];
+      for i, ore in ores {
+        if(i==0) continue;
+        ingr |= ore;
+      }
+      if(itemStack.amount > 1) ingr *= itemStack.amount;
+      return IIngredient(ingr);
+    }
+
+    if(
+      itemStack.isDamageable &&
+      !(style has "noTransformers")
+    ) {
+      return IItemStack(itemStack, ".anyDamage()");
     }
     return IIngredient(a);
   }
 
-  function IItemStack(a as IItemStack) as string {
+  function IItemStack(a as crafttweaker.item.IItemStack) as string {
     return !isNull(a) ? a.commandString : 'null';
+  }
+
+  function IItemStack(a as crafttweaker.item.IItemStack, tail as string) as string {
+    val stack = IItemStack(a);
+    if(isNull(tail) || tail.length==0) return stack;
+    if(a.amount > 1) return "("~stack~")"~tail;
+    return stack ~ tail;
   }
 
   function IItemStack__(a as crafttweaker.item.IItemStack[]) as string {

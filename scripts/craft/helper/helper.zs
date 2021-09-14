@@ -47,9 +47,9 @@ zenClass RecipeWork { zenConstructor() {}
     return rewritten;
   }
 
-  function workOn(block as IBlock, itemsList as IData, inventoryPos as string) as string {
+  function workOn(block as IBlock, itemsList as IData, inventoryPos as string, style as string[]) as string {
     val blockFullId = block.definition.id ~ ":" ~ block.meta;
-    val recipeInventory = RecipeInventory(blockFullId, itemsList);
+    val recipeInventory = RecipeInventory(blockFullId, itemsList, style);
     val acCount = recipeInventory.countActualRecipes();
     if(acCount <= 0) return "Inventory has §nno recipes§r.";
 
@@ -170,6 +170,9 @@ events.onPlayerInteractBlock(function(e as PlayerInteractBlockEvent) {
   val itemsList = data.Items;
   if (isNull(itemsList) || isNull(itemsList.asList()) || itemsList.length <= 0) return;
 
+  val style as string[] = (!isNull(currentItem.tag) && !isNull(currentItem.tag.style))
+    ? currentItem.tag.style.asString().split(" ") : [];
+
   /*
     Create new map entry
   */
@@ -180,16 +183,12 @@ events.onPlayerInteractBlock(function(e as PlayerInteractBlockEvent) {
     Iterate items in inventory
   */
   val inventoryPos = e.x ~":"~ e.y ~":"~ e.z;
-  val workResult = recipeWork.workOn(block, itemsList, inventoryPos);
+  val workResult = recipeWork.workOn(block, itemsList, inventoryPos, style);
 
   if(player.isSneaking) {
     player.sendChat(workResult);
     recipeWork.flagMerged();
   } else {
-    val style = (!isNull(currentItem.tag) && !isNull(currentItem.tag.style))
-      ? currentItem.tag.style.asString().split(" ")
-      : [] as string[];
-
     val playerMessage = recipeWork.logOutput(style, player);
     player.sendChat(playerMessage);
     recipeWork.reset();

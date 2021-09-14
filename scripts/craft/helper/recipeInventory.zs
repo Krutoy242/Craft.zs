@@ -30,7 +30,7 @@ zenClass RecipeInventory {
   var H as int = 0;
   var gridRecipes as GridRecipe[] = [];
 
-  zenConstructor(id as string, itemsList as IData) {
+  zenConstructor(id as string, itemsList as IData, style as string[]) {
     # Find chest
     var sizeWH as int[] = null;
     for name, arr in blockSizes {
@@ -49,11 +49,11 @@ zenClass RecipeInventory {
     }
 
     for i, it in itemsList.asList() {
-      processInventoryItem(i, it);
+      processInventoryItem(i, it, style);
     }
   }
 
-  function processInventoryItem(index as int, it as IData) as void {
+  function processInventoryItem(index as int, it as IData, style as string[]) as void {
     if(isNull(it.asMap()) || isNull(it.id)) return;
     val slot = isNull(it.Slot) ? index : it.Slot.asInt();
     val slotData = getSlotData(slot);
@@ -65,7 +65,7 @@ zenClass RecipeInventory {
 
     var itemStack = itemUtils.getItem(id, damage);
     if(isNull(itemStack)) return;
-    itemStack = itemStack * count;
+    if(count != 1) itemStack *= count;
     if(!isNull(it.tag)) itemStack = itemStack.withTag(it.tag);
 
     val gridIndex = isNull(slotData.gridIndex) ? 0 : slotData.gridIndex.asInt();
@@ -76,7 +76,8 @@ zenClass RecipeInventory {
       gridRecipes[gridIndex].gridBuilder.insert(
         itemStack, 
         isNull(slotData.slot) ? slot : slotData.slot.asInt(), 
-        H>0?3:W);
+        H>0?3:W,
+        style);
     }
   }
 
