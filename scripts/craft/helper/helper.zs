@@ -29,63 +29,76 @@ static isToolNoTag as bool = true;
 zenClass RecipeWork { zenConstructor() {}
 
   var inventories as RecipeInventory[string] = {};
+  var inventories_order as string[] = [];
   var merged as bool = false;
 
   function reset() {
     inventories = {};
+    inventories_order = [];
     merged = false;
+  }
+
+  # Add inventory to list, update order
+  # Return true if old inventory was rewritten for same position
+  function pushInventory(inventoryPos as string, recipeInventory as RecipeInventory) as bool {
+    val rewritten = !isNull(inventories[inventoryPos]);
+    inventories[inventoryPos] = recipeInventory;
+    if(!rewritten) inventories_order += inventoryPos;
+    return rewritten;
   }
 
   function workOn(block as IBlock, itemsList as IData, inventoryPos as string) as string {
     val blockFullId = block.definition.id ~ ":" ~ block.meta;
-    val ri = RecipeInventory(blockFullId, itemsList);
-    val acCount = ri.countActualRecipes();
+    val recipeInventory = RecipeInventory(blockFullId, itemsList);
+    val acCount = recipeInventory.countActualRecipes();
     if(acCount <= 0) return "Inventory has §nno recipes§r.";
 
-    val rewritten = !isNull(inventories[inventoryPos]);
-    inventories[inventoryPos] = ri;
-
+    val rewritten = pushInventory(inventoryPos, recipeInventory);
     return "Inventory with §n" ~ acCount ~ "§r grid" ~ (acCount > 1 ? "s" : "") ~
       (rewritten ? " rewritten." : " memored.");
   }
 
   function flagMerged() { merged = true;}
 
-  function getMergedMap() as IIngredient[string] {
+  # Important!
+  # If "merged" mode used, this function should be called
+  # BEFORE any gridRecipe serialization
+  function merged_updateAndSerialize(style as string[]) as string {
     if(!merged) return null;
 
     val map_weight as int[IIngredient] = {};
-    for pos, recipeInventory in inventories {
-      for gridRecipe in recipeInventory.gridRecipes {
+    for pos in inventories_order {
+      for gridRecipe in inventories[pos].gridRecipes {
         gridRecipe.gridBuilder.writeToMap(map_weight);
       }
     }
 
     var mergedMap = CharacterManager().getMap(map_weight);
-
-    for pos, recipeInventory in inventories {
-      for gridRecipe in recipeInventory.gridRecipes {
+    var order = '';
+    for pos in inventories_order {
+      for gridRecipe in inventories[pos].gridRecipes {
         gridRecipe.gridBuilder.useMergedMap(mergedMap);
+        order += gridRecipe.gridBuilder.getOrder();
       }
     }
 
-    return mergedMap;
+    return serialize.IIngredient_string_(mergedMap, style, order);
   }
 
-  
+
   function logOutput(style as string[], player as IPlayer) as string {
-    
+
     # Gather information and
     # set output items based on hotbar
     val inventoriesCount = inventories.length;
     var acCount = 0;
     var i = 0;
-    for pos, recipeInventory in inventories {
-      for gr in recipeInventory.gridRecipes {
-        if(gr.haveData()) acCount += 1;
-        if(isNull(gr.output)) {
+    for pos in inventories_order {
+      for gridRecipe in inventories[pos].gridRecipes {
+        if(gridRecipe.haveData()) acCount += 1;
+        if(isNull(gridRecipe.output)) {
           val out = player.getInventoryStack(min(i, player.inventorySize));
-          gr.setOutput(out);
+          gridRecipe.setOutput(out);
           i += 1;
         }
       }
@@ -106,17 +119,19 @@ zenClass RecipeWork { zenConstructor() {}
   }
 
   function toString(style as string[]) as string {
-    val newStyle = merged ? (style + "merged") : style;
-    var str as string[] = [];
-    for pos, recipeInventory in inventories {
-      str = str + recipeInventory.toString(newStyle);
-    }
-    var result = serialize.join(str, style has "noFancy" ? "\n" : "\n\n");
+    var result = '';
 
     if(merged) result = "val ingrs = {\n" ~
-      serialize.IIngredient_string_(getMergedMap(), style) ~ "\n" ~ 
-      "} as IIngredient[string];\n\n" ~ result;
-    
+      merged_updateAndSerialize(style) ~ "\n" ~
+      "} as IIngredient[string];\n\n";
+
+    var str as string[] = [];
+    for pos in inventories_order {
+      str += inventories[pos].toString(merged ? (style + "merged") : style);
+    }
+
+    result += serialize.join(str, style has "noFancy" ? "\n" : "\n\n");
+
     if(!(style has "noBucket")) return result.replaceAll(
       '<forge:bucketfilled>\\.withTag\\(\\{FluidName: ("[^"]+?"), Amount: 1000\\}\\)',
       'Bucket($1)'

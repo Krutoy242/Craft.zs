@@ -16,12 +16,12 @@ zenClass GridRecipe { zenConstructor() {}
 
   function toString(style as string[]) as string {
 
-    # Output
-    val output_s = serialize.IIngredient(output);
-
     # Calculate grid, length and other stuff
     # Return if grid is empty
-    if(!gridBuilder.build(output)) return null;
+    if(!gridBuilder.build()) return null;
+
+    # Output
+    val output_s = serialize.IIngredient(output);
 
     var plainLength = "craft.remake(, );".length;
     val isDense = style has "dense" || (output_s.length + gridBuilder.length + plainLength) <= 60;

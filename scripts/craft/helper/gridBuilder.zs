@@ -15,6 +15,7 @@ zenClass GridBuilder { zenConstructor() {}
   var map as IIngredient[string] = null;
   var length as int = 0;
   var grid as Grid = null;
+  var isBuilt as bool = false;
 
 
   function insert(item as IIngredient, slot as int, w as int) {
@@ -45,10 +46,19 @@ zenClass GridBuilder { zenConstructor() {}
 
   function useMergedMap(newMap as IIngredient[string]) {
     mergedMap = newMap;
+    isBuilt = false;
   }
 
-  function build(output as IItemStack) as bool {
+  function getOrder() as string {
+    if(build()) return grid.getOrder();
+    return '';
+  }
+
+  # Build Grid using known ingredient map `grid2d`
+  # Return false if grid has no items in it
+  function build() as bool {
     if(!haveData) return false;
+    if(isBuilt) return true;
 
     # Make ingredients map
     val isMerged = !isNull(mergedMap);
@@ -60,8 +70,8 @@ zenClass GridBuilder { zenConstructor() {}
       map = CharacterManager().getMap(map_weight);
     }
 
-    # Calculate minimum length
-    length += (maxX + 3) * (maxY - 1) - 2; # Char Grid size
+    # Calculate minimum length of serialized form
+    length = (maxX + 3) * (maxY - 1) - 2; # Char Grid size
     if(isMerged) {
       length += 5;
     } else {
@@ -87,6 +97,7 @@ zenClass GridBuilder { zenConstructor() {}
     }
     grid = Grid(gridStr, map);
 
+    isBuilt = true;
     return true;
   }
 }

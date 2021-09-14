@@ -207,6 +207,15 @@ zenClass Grid {
     return opts[minKey];
   }
 
+  # Get joined grid string.
+  # In other words - sequence of characters in appearing order
+  function getOrder() as string {
+    if(isNull(map) || isMapEmpty()) return '';
+    var order = '';
+    for y, row in map { order += row; }
+    return order;
+  }
+
   # Return string representation of grid
   function toString() as string { return toString([]); }
   function toString(_style as string[]) as string {
@@ -224,7 +233,7 @@ zenClass Grid {
 
     # 2d Grid
     if(isNull(map)) 
-      s += "<no grid map>" ;
+      s += "<no grid map>";
     else if(isMapEmpty()) 
       s += "<no grid letters match options>";
     else
@@ -243,7 +252,7 @@ zenClass Grid {
     if(!(style has "noMap")) {
       val opts_s = isNull(opts) 
         ? "<options is not provided>" 
-        : serialize.IIngredient_string_(opts, style);
+        : serialize.IIngredient_string_(opts, style, getOrder());
       s += ", {"~ln~ opts_s ~ln~ "}";
     }
 

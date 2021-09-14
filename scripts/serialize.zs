@@ -85,13 +85,33 @@ zenClass Serialize {
     return string__(s);
   }
 
-  function IIngredient_string_(ingrList as crafttweaker.item.IIngredient[string], style as string[]) as string {
+  function IIngredient_string_(ingrList as crafttweaker.item.IIngredient[string], style as string[]) as string {return IIngredient_string_(ingrList, style, null);}
+  function IIngredient_string_(ingrList as crafttweaker.item.IIngredient[string], style as string[], order as string) as string {
     var s = "";
     if(isNull(ingrList)) return s;
 
-    # Count map
-    var ingrsCount = 0;
-    for c, ingr in ingrList { ingrsCount += 1; }
+    # Prepare order
+    var ordered_ingrList = [] as crafttweaker.item.IIngredient[string][];
+    val addedKeys = {} as bool[string];
+
+    # Add ordered
+    if(!isNull(order)) {
+      for c in order.split("") {
+        if(!isNull(addedKeys[c])) continue;
+        val ingr = ingrList[c];
+        if(isNull(ingr)) continue;
+        ordered_ingrList += {[c]: ingr} as crafttweaker.item.IIngredient[string];
+        addedKeys[c] = true;
+      }
+    }
+
+    # Add other to ordered list
+    for c, ingr in ingrList {
+      if(!isNull(addedKeys[c])) continue;
+      ordered_ingrList += {[c]: ingr} as crafttweaker.item.IIngredient[string];
+      addedKeys[c] = true;
+    }
+
 
     var maxLength = 0;
     val isDense = (style has "dense");
@@ -99,9 +119,10 @@ zenClass Serialize {
     val comment_start = isDense ? "/*" : " # ";
     val comment_end   = isDense ? "*/" : "";
     val trailComma = (style has "noTrail") ? "" : ",";
-    for q in 0 .. 2 {
+    var ingrsCount = ingrList.length;
+    for q in 0 .. 2 { # First run determine map max length, second actually string
       var k = 0;
-      for c, ingr in ingrList {
+      for pair in ordered_ingrList { for c, ingr in pair {
         val s_ingr = IIngredient(ingr, style);
         val isLast = k == ingrsCount - 1;
         val s_comma = isLast ? trailComma : ",";
@@ -121,7 +142,7 @@ zenClass Serialize {
             (!isLast ? ln : "");
         }
         k += 1;
-      }
+      }}
     }
 
     return s;
