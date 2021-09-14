@@ -1,47 +1,77 @@
 # Craft.zs
+
 A [ZenScript](https://docs.blamejared.com/) scripts for fancy working with Crafting Table recipes.
 
 <img src="https://i.imgur.com/yhmRZTM.gif">
 
 
 ---
+
+- [Craft.zs](#craftzs)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Usage Details](#usage-details)
+    - [Lay out recipes](#lay-out-recipes)
+    - [Bone right-click](#bone-right-click)
+    - [Advanced Ingredients](#advanced-ingredients)
+      - [Amount](#amount)
+      - [Catalysts](#catalysts)
+  - [Methods](#methods)
+    - [`craft.make()`](#craftmake)
+    - [`craft.shapeless()`](#craftshapeless)
+    - [`craft.remake()`](#craftremake)
+    - [`craft.reshapeless()`](#craftreshapeless)
+- [Grid](#grid)
+  - [Constructor](#constructor)
+  - [Grid Instance Fields](#grid-instance-fields)
+    - [`grid.error`](#griderror)
+    - [`grid.X`](#gridx)
+    - [`grid.Y`](#gridy)
+  - [Grid Instance Methods](#grid-instance-methods)
+    - [`grid.shaped()`](#gridshaped)
+    - [`grid.shapeless()`](#gridshapeless)
+    - [`grid.getMainIngredient()`](#gridgetmainingredient)
+    - [`grid.toString()`](#gridtostring)
+  - [Advanced usage](#advanced-usage)
+
 ---
 
-> ## Installation
+## Installation
 
-Drop content of [scripts/](scripts/) into your Minecraft 1.12 `scripts/` folder.
+Drop folder [scripts/craft/](scripts/craft/) into your Minecraft 1.12 `scripts/` folder.
 
-
-### Installation details
-
-1. Change scripts `#priority` if needed
-2. Some scripts creating global variables. You should manually handle this if your scripts have globals with same name
-   * global `serialize` - [serialize.zs](scripts/serialize.zs)
-   * global `craft` - [craft.zs](scripts/craft/craft.zs)
-   * global `utils` and `Bucket` - [utils.zs](scripts/utils.zs)
-3. [craft.zs](scripts/craft/craft.zs) have predefined code for mod `ExtendedCrafting`. If you haven't it, follow instructions in this file.
+Change scripts `#priority` if needed.  
+These globals will be created: `craft`, `serialize`, `Bucket`.  
+**Extended Crafting** mod optional.
 
 
-> ## Usage
+## Usage
 
-1. In MC lay out your crafting recipe in an block inventory
-2. Put recipe output in 1st player's inventory slot
-3. Right-Click inventory with **Bone**
-4. Generated code can be found in `crafttweaker.log` file
+1. Lay out your crafting recipes in an block inventory (![](https://git.io/Jsw8h "Draconium Chest") for example).
+2. 3x3 for intup, output on the right.
+3. Right-Click inventory with **Bone**.
+4. Code generated in `crafttweaker.log`.
 
-<img src="https://i.imgur.com/ImRljJB.png" height=170>
-<img src="https://i.imgur.com/XrMUVis.png" height=170>
+<img src="https://i.imgur.com/e1hhHZc.png">
 
 ```zs
-// [Piston*2] from [Iron_Plate][+3]
-craft.remake(<minecraft:piston> * 2, ["pretty",
+# [Piston]*4 from [Copper Gear][+3]
+craft.remake(<minecraft:piston> * 4, ["pretty",
   "# # #",
-  "░ I ░",
+  "░ ¤ ░",
   "░ ♥ ░"], {
-  "░": <ore:compressed1xCobblestone>, # Compressed Cobblestone
-  "#": <ore:plankTreatedWood>,        # Treated Wood Planks
-  "♥": <ore:dustRedstone>,            # Redstone
-  "I": <ore:plateIron>                # Iron Plate
+  "#": <ore:plankWood>,    # Oak Wood Planks
+  "░": <ore:cobblestone>,  # Cobblestone
+  "¤": <ore:gearCopper>,   # Copper Gear
+  "♥": <ore:dustRedstone>, # Redstone
+});
+
+# [Chest]*2 from [Oak Wood]
+craft.remake(<minecraft:chest> * 2, ["pretty",
+  "# # #",
+  "#   #",
+  "# # #"], {
+  "#": <ore:logWood>, # Oak Wood
 });
 ```
 
@@ -53,9 +83,9 @@ To lay out recipes you can use **any 3x3 inventory** (like Crafting Station from
 
 <img src="https://i.imgur.com/wI9vrn8.png">
 
-
-Also, you can lay out several recipes at once in Chest / Crate from other mods, imaginary devide GUI grid by 4x3 rectarangles.  
-List of valid inventories can be found in [recipeInventory.zs](scripts/craft/helper/recipeInventory.zs)
+In this case, put *output* in first player's slot.  
+You can lay out several recipes at once in Chest / Crate from other mods, imaginary devide GUI grid by 4x3 rectarangles.  
+List of valid inventories can be found in [recipeInventory.zs](scripts/craft/helper/recipeInventory.zs).
 
 <img src="https://i.imgur.com/WtiocV5.png" width="340">
 
@@ -64,8 +94,7 @@ List of valid inventories can be found in [recipeInventory.zs](scripts/craft/hel
 
 You must be in creative `/gamemode 1` to use **Bone**.
 
-**Bone** a.k.a "Recipe tool" can be changed from bone to any item in [helper.zs](scripts/craft/helper/helper.zs).  
-Also there you can find option to only item with NBT tag would cause triggers.
+**Bone** a.k.a "Recipe tool" can be changed from bone to any item in [helper.zs](scripts/craft/helper/helper.zs).
 
 **Recipe tool** can be configured with NBT tags. See [helper_jei.zs](scripts/craft/helper/helper_jei.zs).
 
@@ -90,19 +119,50 @@ craft.remake(<tconstruct:tooltables:2>, [" p", " ≠"], ingrs);
 craft.remake(<tconstruct:tooltables>, ["w"], ingrs);
 ```
 
+
+### Advanced Ingredients
+
+#### Amount
+
+The **amount** of each ingredient affects its representation:  
+  - 1 - Automatic replacement according to the ore dictionary (if not disabled by the style)
+  - 2 - The item will be taken "as is"
+  - 3 - Item will be Wildcarded
+
+<img src="https://i.imgur.com/ehhpOWO.png" width="144">
+
+```zs
+craft.remake(<minecraft:planks> * 30, [
+  "≢#≠"], {
+  "≢": <ore:logWood>,       // Any Wood Log
+  "#": <forestry:logs.1:3>, // Sequoia Wood
+  "≠": <forestry:logs.1:*>, // Wildcarded Logs
+});
+```
+
+#### Catalysts
+
+Large inventories with 4x3 grids have two free slots. Place special items there to change the logic of crafting:
+- ![](https://git.io/JRLyS "Glass Pane") - The recipe will be shapeless.
+- ![](https://git.io/Ju5yy "Iron Nugget") - Added removal of old recipes by name.
+
+<img src="https://i.imgur.com/vC0Y89r.png">
+
+
 <br>
 
+---
 ---
 
 <br>
 
-> ##  Methods
+##  Methods
 
 Using **Bone** to make recipes is just "helper". Some functions you can use manually in code.
 
 
 
-### `craft.make`
+### `craft.make()`
 
 > craft.make(output as `IItemStack`, gridStr as `string[]`, options as `IIngredient[string]`, [fnc as `IRecipeFunction`])
 
@@ -135,7 +195,7 @@ craft.make(<minecraft:chest> * 2, [
 ```
 
 
-### `craft.shapeless`
+### `craft.shapeless()`
 
 > craft.shapeless(output as `IItemStack`, gridStr as `string`, options as `IIngredient[string]`, [fnc as `IRecipeFunction`])
 
@@ -157,7 +217,7 @@ craft.shapeless(<gendustry:pollen_kit> * 4, "AC-DC", {
 
 
 
-### `craft.remake`
+### `craft.remake()`
 
 > craft.remake(output as `IItemStack`, gridStr as `string[]`, options as `IIngredient[string]`, [fnc as `IRecipeFunction`])
 
@@ -168,27 +228,7 @@ Same as `craft.make`, but would remove old recipe first by calling
 recipes.remove(output);
 ```
 
-If `options` argument have field with key `"remove"`, value of this field would be removed instead.  
-This is handy when you have different amount of items in vanilla recipe and new recipe. Or when output have different NBT.
-
-
-**Examples**
-```zs
-# [Piston*2] from [Iron_Plate][+3]
-craft.remake(<minecraft:piston> * 2, ["pretty",
-  "# # #",
-  "1 I 1",
-  "1 ♥ 1"], {
-  "1": <ore:compressed1xCobblestone>, # Compressed Cobblestone
-  "#": <ore:plankTreatedWood>,        # Treated Wood Planks
-  "♥": <ore:dustRedstone>,            # Redstone
-  "I": <ore:plateIron>,               # Iron Plate
-  remove: <minecraft:piston>
-});
-```
-
-
-### `craft.reshapeless`
+### `craft.reshapeless()`
 
 > craft.reshapeless(output as `IItemStack`, gridStr as `string`, options as `IIngredient[string]`, [fnc as `IRecipeFunction`])
 
@@ -198,8 +238,7 @@ Same as `craft.remake`, but shapeless
 ```zs
 # Lesser blaze powder
 craft.reshapeless(<minecraft:blaze_powder>, "A", { 
-  A: <minecraft:blaze_rod>, 
-  remove: <minecraft:blaze_powder> * 2
+  A: <minecraft:blaze_rod>
 });
 ```
 
@@ -236,7 +275,7 @@ import scripts.craft.grid.Grid;
 
 <br>
 
-###  Constructor
+## Constructor
 
 > `Grid`(gridStr as `string[]`, options as `IIngredient[string]`)
 
@@ -283,7 +322,7 @@ var c = Grid([
 
 <br>
 
-> ##  Grid Instance Fields
+##  Grid Instance Fields
 
 
 
@@ -310,11 +349,11 @@ Maximum grid sizes by X (width) and Y (height).
 
 <br>
 
-> ##  Grid Instance Methods
+##  Grid Instance Methods
 
 <br>
 
-### `grid.shaped`
+### `grid.shaped()`
 
 > grid.shaped() as `IIngredient[][]`
 
@@ -337,7 +376,7 @@ recipes.addShaped(output, grid.shaped());
 ```
 
 
-### `grid.shapeless`
+### `grid.shapeless()`
 
 > grid.shapeless() as `IIngredient[]`
 
@@ -349,7 +388,7 @@ All spaces `" "` and wrong ingredients would be ignored, so resulted array never
 recipes.addShapeless(output, grid.shapeless());
 ```
 
-### `grid.getMainIngredient`
+### `grid.getMainIngredient()`
 
 > grid.getMainIngredient() as `IIngredient`
 
@@ -368,7 +407,7 @@ Grid(["AA",
 ], ingrs).getMainIngredient();
 ```
 
-### `grid.toString`
+### `grid.toString()`
 
 > grid.toString([style as `string[]`]) as `string`
 
@@ -414,7 +453,7 @@ grid.toString(["pretty", "fancy"]);
 
 <br>
 
-> ## Advanced usage
+## Advanced usage
 
 String array can contain special characters that mirror ingredients in different axes.  
 This can help when you building huge recipes manually and won't insert same letter 4 times for each side.
@@ -451,7 +490,6 @@ Remember: if command character would be used as key in `options`, it functionali
 
 Real example from [Enigmatica2: Expert - Extended](https://github.com/Krutoy242/Enigmatica2Expert-Extended/blob/0c2cedfd20025fb6bf1b71fd26b8a7c4d215aa6a/scripts/Creative.zs#L455-L466):
 
-<sub><sup>(some characters was replaced because i use "Fira Code" and github using "SFMono-Regular")</sup></sub>
 
 ```zs
 # Mekanism Creative Energy
