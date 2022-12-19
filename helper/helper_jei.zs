@@ -18,6 +18,9 @@ noPretty      : No spaces in grid
 noTrail       : No trailing comma in ingredients map
 noBucket      : No transforming <forge:bucketfilled> into global Bucket()
 dense         : Always pack recipe in one line
+5x5           : For big chests (Like Draconium chest) use 5x5 grids
+                instead default 3x3. This style working for any number,
+                including 7x7 and 9x9
 
 Style tags related to ingredients:
 
