@@ -219,8 +219,7 @@ zenClass Grid {
   }
 
   # Return string representation of grid
-  function toString() as string { return toString([]); }
-  function toString(_style as string[]) as string {
+  function toString(_style as string[] = null) as string {
     val style as string[] = isNull(_style) ? [] : _style;
 
     val isDense     =  (style has "dense");

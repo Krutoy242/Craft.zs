@@ -17,7 +17,7 @@ zenClass Serialize {
   function     wrap(s as string, wraps as string) as string { return wraps[0]~s~wraps[1]; }
   function     wrap(s as string)   as string { return wrap(s, '""'); }
   function  _string(s as string)   as string { return wrap(s); }
-  function string__(s as string[]) as string { return wrap(join(s, ", "), "[]"); }
+  function string__(s as string[], delimiter as string = ", ") as string { return wrap(join(s, delimiter), "[]"); }
   function     args(s as string[]) as string { return wrap(join(s, ", "), '()'); }
 
   function repeat(n as int) as string {return repeat(" ", n);}
@@ -31,8 +31,7 @@ zenClass Serialize {
     return str;
   }
 
-  function join(arr as string[]) as string { return join(arr, "\n"); }
-  function join(arr as string[], delimiter as string) as string {
+  function join(arr as string[], delimiter as string = "\n") as string {
     var first = true;
     var s = "";
     for str in arr {
