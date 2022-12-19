@@ -115,13 +115,12 @@ zenClass Serialize {
       }
     }
 
-    # Add other to ordered list
-    for c, ingr in ingrList {
-      if(!isNull(addedKeys[c])) continue;
-      ordered_ingrList += {[c]: ingr} as crafttweaker.item.IIngredient[string];
-      addedKeys[c] = true;
-    }
-
+    // # Add other to ordered list
+    // for c, ingr in ingrList {
+    //   if(!isNull(addedKeys[c])) continue;
+    //   ordered_ingrList += {[c]: ingr} as crafttweaker.item.IIngredient[string];
+    //   addedKeys[c] = true;
+    // }
 
     var maxLength = 0;
     val isDense = (style has "dense");
@@ -129,7 +128,7 @@ zenClass Serialize {
     val comment_start = isDense ? "/*" : " # ";
     val comment_end   = isDense ? "*/" : "";
     val trailComma = (style has "noTrail") ? "" : ",";
-    var ingrsCount = ingrList.length;
+    var ingrsCount = ordered_ingrList.length;
     for q in 0 .. 2 { # First run determine map max length, second actually string
       var k = 0;
       for pair in ordered_ingrList { for c, ingr in pair {
