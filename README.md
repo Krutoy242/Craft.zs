@@ -38,7 +38,7 @@ A [ZenScript](https://docs.blamejared.com/) scripts for fancy working with Craft
 
 ## Installation
 
-Drop folder [scripts/craft/](scripts/craft/) into your Minecraft 1.12 `scripts/` folder.
+Drop this repo into your Minecraft 1.12 `scripts/craft` folder.
 
 Change scripts `#priority` if needed.  
 These globals will be created: `craft`, `serialize`, `Bucket`.  
@@ -85,7 +85,7 @@ To lay out recipes you can use **any 3x3 inventory** (like Crafting Station from
 
 In this case, put *output* in first player's slot.  
 You can lay out several recipes at once in Chest / Crate from other mods, imaginary devide GUI grid by 4x3 rectarangles.  
-List of valid inventories can be found in [recipeInventory.zs](scripts/craft/helper/recipeInventory.zs).
+List of valid inventories can be found in [recipeInventory.zs](helper/recipeInventory.zs).
 
 <img src="https://i.imgur.com/WtiocV5.png" width="340">
 
@@ -94,9 +94,9 @@ List of valid inventories can be found in [recipeInventory.zs](scripts/craft/hel
 
 You must be in creative `/gamemode 1` to use **Bone**.
 
-**Bone** a.k.a "Recipe tool" can be changed from bone to any item in [helper.zs](scripts/craft/helper/helper.zs).
+**Bone** a.k.a "Recipe tool" can be changed from bone to any item in [helper.zs](helper/helper.zs).
 
-**Recipe tool** can be configured with NBT tags. See [helper_jei.zs](scripts/craft/helper/helper_jei.zs).
+**Recipe tool** can be configured with NBT tags. See [helper_jei.zs](helper/helper_jei.zs).
 
 
 **Shift+RightClick** will merge inventory together, so they would use same items in recipes
