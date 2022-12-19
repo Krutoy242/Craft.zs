@@ -2,6 +2,7 @@ import crafttweaker.item.IIngredient;
 import crafttweaker.item.IItemStack;
 import scripts.craft.grid.Grid;
 import scripts.craft.helper.characterManager.CharacterManager;
+import scripts.craft.helper.styler.styler;
 #priority 3
 
 #loader crafttweaker reloadable
@@ -16,7 +17,6 @@ zenClass GridBuilder {
 
   # Calculated fields
   var map as IIngredient[string] = null;
-  var length as int = 0;
   var grid as Grid = null;
   var isBuilt as bool = false;
 
@@ -56,15 +56,15 @@ zenClass GridBuilder {
     }
   }
 
-  function insertCatalyst(ingr as IIngredient) as void {
-    if(isNull(ingr)) return;
+  function insertCatalyst(item as IItemStack) as void {
+    if(isNull(item)) return;
 
-    for catl, newStyle in catalystsStyles {
-      if(catl has ingr || ingr has catl) {
+    for catalyst, newStyle in styler.catalysts {
+      if(item.definition.id.matches(catalyst)) {
         localStyle += newStyle;
-        return;
       }
     }
+    localStyle += item.definition.id;
   }
 
   function writeToMap(map_weight as int[IIngredient]) {
@@ -100,17 +100,6 @@ zenClass GridBuilder {
       val map_weight as int[IIngredient] = {};
       writeToMap(map_weight);
       map = CharacterManager().getMap(map_weight);
-    }
-
-    # Calculate minimum length of serialized form
-    length = (maxX + 3) * (maxY - 1) - 2; # Char Grid size
-    if(isMerged) {
-      length += 5;
-    } else {
-      for c, ingr in map {
-        length += serialize.IIngredient(ingr).length + 5;
-      }
-      length -= 2; # trail
     }
 
     # Flipped map

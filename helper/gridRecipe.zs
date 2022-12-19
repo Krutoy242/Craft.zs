@@ -3,8 +3,10 @@
 #loader crafttweaker reloadable
 
 import crafttweaker.item.IItemStack;
+import crafttweaker.item.IIngredient;
 import scripts.craft.helper.gridBuilder.GridBuilder;
 import scripts.craft.helper.styler.styler;
+import scripts.craft.grid.Grid;
 
 
 zenClass GridRecipe {
@@ -34,42 +36,14 @@ zenClass GridRecipe {
 
     # Merge style with Grid Builder local style (may changed with catalysts)
     for tag in gridBuilder.localStyle { if(!(style has tag)) style += tag; }
-
-    val removedRecipeNames = style has "removeByRecipeName" ? toString_outputRecipesNames(style) : "";
-    if(removedRecipeNames.length > 0) style += "noRemake";
-    
-    # Determine called method
-    var calledMethod = styler.get(style, {
-      shapeless: { noRemake: "craft.shapeless", _: "craft.reshapeless"},
-              _: { noRemake: "craft.make"     , _: "craft.remake"     }}
-    );
-
-    var plainLength = (calledMethod ~ "(, );").length;
-    val output_s = serialize.IIngredient(output);
-    val isDense = style has "dense" || (output_s.length + gridBuilder.length + plainLength) <= 60;
-    if (isDense) style += "dense";
-
-    # Add Ingredients Table
-    var map_s = (style has "merged") ? ", ingrs" ~ (isDense?"":"\n") : "";
-
-    if(  style has "merged"  ) style += "noMap";
     if(!(style has "noPretty") && (gridBuilder.maxX <= 1 || gridBuilder.maxY <= 1)) style += "noPretty";
-    val grid_s = gridBuilder.grid.toString(style) ~ map_s;
 
-    return
-        (style has "noFancy" ? "" : "# "~craft.recipeName(output, gridBuilder.grid) ~ "\n")
-      ~ removedRecipeNames
-      ~ calledMethod ~ "("~output_s~", "~grid_s~");";
-  }
+    # Comment
+    val prefixComment = style has "noFancy"
+      ? ""
+      : "# "~craft.recipeName(output, gridBuilder.grid) ~ "\n";
 
-  function toString_outputRecipesNames(style as string[]) as string {
-    if(isNull(output)) return "";
-
-    var str = '';
-    for rec in recipes.getRecipesFor(output) {
-      str += 'recipes.removeByRecipeName("'~rec.resourceDomain~":"~rec.name~'");\n';
-    }
-
-    return str;
+    return prefixComment
+      ~ styler.pickTemplate(output, gridBuilder.grid, style);
   }
 }
