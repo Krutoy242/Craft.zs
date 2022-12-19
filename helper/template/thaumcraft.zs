@@ -52,7 +52,7 @@ val fnc as function(IItemStack,Grid,string[])string = function(output as IItemSt
     ~ "(" ~ block ~ ");";
 };
 
-styler.template(fnc);
+styler.registerTemplate(fnc);
 
 
 function serializeTCInfusion(style as string[], output_s as string, grid as Grid) as string {

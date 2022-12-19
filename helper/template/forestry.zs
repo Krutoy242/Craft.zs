@@ -48,7 +48,7 @@ val fnc as function(IItemStack,Grid,string[])string = function(output as IItemSt
   return removed ~ calledMethod ~ "(" ~ block ~ ");";
 };
 
-styler.template(fnc);
+styler.registerTemplate(fnc);
 
 
 function extractLiquids(grid as Grid, default as string) as string {
