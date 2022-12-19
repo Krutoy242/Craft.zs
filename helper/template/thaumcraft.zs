@@ -65,7 +65,7 @@ function serializeTCInfusion(style as string[], output_s as string, grid as Grid
       '  '~grid.extractItem('thaumcraft:taint_fibre', 3)~', # Instability\n'~
       '  '~extractGridAspects(grid)~',\n'~
       '  '~serialize.IIngredient(centralItem) ~ ', # Central Item\n'~
-      '  scripts.craft.grid.Grid('~grid.trim().toString(style)~').spiral(1)';
+      '  Grid('~grid.trim().toString(style)~').spiral(1)';
 }
 
 function serializeTCWorkbench(style as string[], output_s as string, grid as Grid) as string {
@@ -85,7 +85,7 @@ function serializeTCWorkbench(style as string[], output_s as string, grid as Gri
       '  '~visCost~', # Vis cost\n'~
       '  '~aspects~',\n'~
       '  '~output_s~', # Output\n'~
-      '  scripts.craft.grid.Grid('~grid.trim().toString(style)~').'~
+      '  Grid('~grid.trim().toString(style)~').'~
       (style has 'shapeless' ? 'shapeless' : 'shaped')
       ~'()';
 }

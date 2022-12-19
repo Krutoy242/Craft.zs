@@ -57,7 +57,7 @@ for i in 0 .. 5 {
   val ext = Extension(function (
     output as crafttweaker.item.IItemStack,
     recipeName as string,
-    grid as scripts.craft.grid.Grid,
+    grid as Grid,
     recipeFunction as crafttweaker.recipes.IRecipeFunction,
     recipeAction as crafttweaker.recipes.IRecipeAction,
     isShapeless as bool

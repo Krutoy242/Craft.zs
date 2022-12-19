@@ -6,7 +6,6 @@ import crafttweaker.event.PlayerInteractBlockEvent;
 import crafttweaker.block.IBlock;
 import crafttweaker.world.IWorld;
 
-import scripts.craft.grid.Grid;
 import scripts.craft.helper.recipeInventory.RecipeInventory;
 import scripts.craft.helper.characterManager.CharacterManager;
 

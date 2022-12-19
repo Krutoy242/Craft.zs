@@ -539,3 +539,6 @@ zenClass Grid {
     return true;
   }
 }
+
+global Grid as function(string[],IIngredient[string])Grid =
+  function(gridStr as string[], options as IIngredient[string]) as Grid { return Grid(gridStr, options); };
