@@ -2,6 +2,8 @@
 
 #priority -1
 
+#loader crafttweaker reloadable
+
 /*
 
 Configure your tool, by giving yourself bone with NBT tag.

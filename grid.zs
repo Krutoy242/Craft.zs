@@ -31,6 +31,8 @@ Usage:
 import crafttweaker.item.IIngredient;
 #priority 2005
 
+#loader crafttweaker reloadable
+
 zenClass Grid {
 
   # Public fields

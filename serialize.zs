@@ -8,6 +8,8 @@ import crafttweaker.oredict.IOreDictEntry;
 
 #priority 3000
 
+#loader crafttweaker reloadable
+
 
 zenClass Serialize {
 	zenConstructor() { }

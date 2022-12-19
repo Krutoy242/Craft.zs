@@ -22,6 +22,8 @@ Example
 
 #priority 2000
 
+#loader crafttweaker reloadable
+
 import crafttweaker.item.IIngredient;
 import crafttweaker.item.IItemStack;
 import crafttweaker.recipes.IRecipeFunction;

@@ -1,5 +1,7 @@
 #priority 2
 
+#loader crafttweaker reloadable
+
 import crafttweaker.item.IItemStack;
 import scripts.craft.helper.gridBuilder.GridBuilder;
 import scripts.craft.helper.styler.styler;

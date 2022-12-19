@@ -1,5 +1,7 @@
 #priority 2001
 
+#loader crafttweaker reloadable
+
 import crafttweaker.item.IItemStack;
 import crafttweaker.recipes.IRecipeFunction;
 import crafttweaker.recipes.IRecipeAction;

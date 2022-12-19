@@ -4,15 +4,9 @@ import scripts.craft.grid.Grid;
 import scripts.craft.helper.characterManager.CharacterManager;
 #priority 3
 
+#loader crafttweaker reloadable
 
 zenClass GridBuilder {
-
-  # This items in catalyst slot would add this styles
-  val catalystsStyles as string[IIngredient] = {
-    <minecraft:glass_pane>  : "shapeless",
-    <minecraft:iron_nugget> : "removeByRecipeName",
-  } as string[IIngredient];
-
   var grid2d as IIngredient[][] = [];
   var haveData as bool = false;
   var maxX as int = 0;

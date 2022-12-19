@@ -7,7 +7,9 @@ using string styles
 
 */
 
-#priority 5
+#priority 6
+
+#loader crafttweaker reloadable
 
 zenClass Styler {
   zenConstructor() {}
