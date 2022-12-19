@@ -6,6 +6,7 @@ Dev-only file. Please remove it.
 
 */
 
+#norun
 
 import crafttweaker.item.IIngredient;
 import crafttweaker.item.IItemStack;
