@@ -21,7 +21,7 @@ Out of the box, `Craft.zs` provide support for several crafting methods.
 
 <table>
 <tr >
-  <td style="min-width:10rem">Layout:<img src="https://i.imgur.com/G2n2JxT.png"></td>
+  <td style="min-width:200px">Layout:<img src="https://i.imgur.com/G2n2JxT.png"></td>
   <td rowspan=2>
 
 ```zs
@@ -61,7 +61,7 @@ mods.thaumcraft.ArcaneWorkbench.registerShapedRecipe(
 
 <table>
 <tr >
-  <td style="min-width:10rem">Layout:<img src="https://i.imgur.com/hn3OrpH.png"></td>
+  <td style="min-width:200px">Layout:<img src="https://i.imgur.com/hn3OrpH.png"></td>
   <td rowspan=2>
 
 ```zs
@@ -93,7 +93,7 @@ mods.thaumcraft.Crucible.registerRecipe(
 
 <table>
 <tr >
-  <td style="min-width:10rem">Layout:<img src="https://i.imgur.com/26od7X5.png"></td>
+  <td style="min-width:200px">Layout:<img src="https://i.imgur.com/26od7X5.png"></td>
   <td rowspan=2>
 
 ```zs
@@ -135,7 +135,7 @@ mods.thaumcraft.Infusion.registerRecipe(
 
 <table>
 <tr >
-  <td style="min-width:10rem">Layout:<img src="https://i.imgur.com/TndtScD.png"></td>
+  <td style="min-width:200px">Layout:<img src="https://i.imgur.com/TndtScD.png"></td>
   <td rowspan=2>
 
 ```zs
@@ -161,7 +161,7 @@ mods.bloodmagic.BloodAltar.addRecipe(<animus:blockbloodwood>, <randomthings:spec
 
 <table>
 <tr >
-  <td style="min-width:10rem">Layout:<img src="https://i.imgur.com/mG5D8CO.png"></td>
+  <td style="min-width:200px">Layout:<img src="https://i.imgur.com/mG5D8CO.png"></td>
   <td rowspan=2>
 
 ```zs
@@ -190,7 +190,7 @@ mods.forestry.ThermionicFabricator.addCast(<immersiveengineering:stone_decoratio
 
 <table>
 <tr >
-  <td style="min-width:10rem">Layout:<img src="https://i.imgur.com/X4JUOhi.png"></td>
+  <td style="min-width:200px">Layout:<img src="https://i.imgur.com/X4JUOhi.png"></td>
   <td rowspan=2>
 
 ```zs
