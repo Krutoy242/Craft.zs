@@ -7,6 +7,8 @@
 import crafttweaker.item.IItemStack;
 import scripts.craft.helper.styler.styler;
 import scripts.craft.grid.Grid;
+import scripts.craft.helper.template.com.extractItem;
+import scripts.craft.helper.template.com.extractFluids;
 
 // server.commandManager.executeCommand(server, '/say '~catl~' '~name);
 
@@ -36,12 +38,12 @@ val fnc as function(IItemStack,Grid,string[])string = function(output as IItemSt
   );
 
   val output_s = serialize.IIngredient(output);
-  val executionTime = grid.extractItem('minecraft:clock', 4) * 10;
-  val liquid = extractLiquids(grid, style has "forestry:carpenter" ? '<fluid:water> * 1000' : '<fluid:glass> * 1000');
+  val executionTime = extractItem(grid, 'minecraft:clock', 4) * 10;
+  val fluid = extractFluids(grid, style has "forestry:carpenter" ? 'water:1000' : 'glass:1000');
   val block = output_s
-    ~ ', scripts.craft.grid.Grid('~grid.trim().toString(style)~').shaped()'
+    ~ ', Grid('~grid.trim().toString(style)~').shaped()'
     ~ (style has "forestry:carpenter" ? ', ' ~ executionTime : '')
-    ~ ', ' ~ liquid
+    ~ ', ' ~ fluid.replaceAll('^([^:]+):(\\d+).*', '<fluid:$1> * $2')
     ~ (style has "forestry:wax_cast" ? ', <forestry:wax_cast:*>' : '')
   ;
 
@@ -49,10 +51,3 @@ val fnc as function(IItemStack,Grid,string[])string = function(output as IItemSt
 };
 
 styler.registerTemplate(fnc);
-
-
-function extractLiquids(grid as Grid, default as string) as string {
-  for k, v in grid.extractByTag('FluidName', 'Amount')             { return '<fluid:'~k~'> * '~v; }
-  for k, v in grid.extractByTag('Fluid.FluidName', 'Fluid.Amount') { return '<fluid:'~k~'> * '~v; }
-  return default;
-}

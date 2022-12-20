@@ -7,6 +7,8 @@
 import crafttweaker.item.IItemStack;
 import scripts.craft.helper.styler.styler;
 import scripts.craft.grid.Grid;
+import scripts.craft.helper.template.com.extractItem;
+import scripts.craft.helper.template.com.extractByTag;
 
 val fnc as function(IItemStack,Grid,string[])string = function(output as IItemStack, grid as Grid, style as string[]) as string {
   if(!(
@@ -62,7 +64,7 @@ function serializeTCInfusion(style as string[], output_s as string, grid as Grid
       '  "'~getThaumRecipeName(output_s)~'", # Name\n'~
       '  "INFUSION", # Research\n'~
       '  '~output_s~', # Output\n'~
-      '  '~grid.extractItem('thaumcraft:taint_fibre', 3)~', # Instability\n'~
+      '  '~extractItem(grid, 'thaumcraft:taint_fibre', 3)~', # Instability\n'~
       '  '~extractGridAspects(grid)~',\n'~
       '  '~serialize.IIngredient(centralItem) ~ ', # Central Item\n'~
       '  Grid('~grid.trim().toString(style)~').spiral(1)';
@@ -108,9 +110,15 @@ function getThaumRecipeName(output_s as string) as string {
 }
 
 function extractGridAspects(grid as Grid) as string {
-  return grid.extractByTagSerialize('Aspects[0].key', 'Aspects[0].amount',
-    function(aspectName as string, amount as int) as string {
-      return '<aspect:'~aspectName~'>' ~ (amount>1 ? " * " ~ amount : "");
-    }
-  );
+  val aspects = extractByTag(grid, 'Aspects[0].key', 'Aspects[0].amount');
+  var result = '[';
+  for i, str in aspects.split(' ') {
+    val splitted = str.split(':');
+    val name = splitted[0];
+    val amount = splitted[1] as int;
+    result += '<aspect:'~name~'>'
+      ~ (amount>1 ? " * " ~ amount : "")
+      ~ (i==0?'':', ');
+  }
+  return result~']';
 }

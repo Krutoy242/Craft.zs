@@ -8,6 +8,7 @@ import crafttweaker.item.IItemStack;
 import crafttweaker.item.IIngredient;
 import scripts.craft.helper.styler.styler;
 import scripts.craft.grid.Grid;
+import scripts.craft.helper.template.com.extractFluids;
 
 val fnc as function(IItemStack,Grid,string[])string = function(output as IItemStack, grid as Grid, style as string[]) as string {
   if(!(
@@ -39,15 +40,9 @@ styler.registerTemplate(fnc);
 
 
 function serializeBM(style as string[], output_s as string, grid as Grid) as string {
-  val essenceAmount = extractEssence(grid) as int;
+  val fluid = extractFluids(grid, '').replaceAll('^[^:]+:(\\d+).*', '$1');
+  val essenceAmount = fluid.matches('\\d+') ? fluid as int : 1000;
   val input_s = serialize.IIngredient(grid.shapeless()[0], style);
 
-  return  output_s ~ input_s ~ ', 0, '~essenceAmount~', '~essenceAmount/100~', '~essenceAmount/50;
-}
-
-
-function extractEssence(grid as Grid) as string {
-  return grid.extractByTagSerialize('Fluid.FluidName', 'Fluid.Amount',
-    function(name as string, amount as int) as string {return amount;}
-  );
+  return  output_s ~ ', ' ~ input_s ~ ', 0, '~essenceAmount~', '~essenceAmount/100~', '~essenceAmount/50;
 }

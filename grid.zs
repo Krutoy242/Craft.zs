@@ -29,6 +29,7 @@ Usage:
 */
 
 import crafttweaker.item.IIngredient;
+import crafttweaker.item.IItemStack;
 #priority 2005
 
 #loader crafttweaker reloadable
@@ -371,9 +372,13 @@ zenClass Grid {
     return this;
   }
 
-  # Remove item from grid and count its amount
-  function extractItem(id as string, default as int = 0) as int {
-    var result = 0;
+  /**
+   * Remove ingredient from grid by predicate
+   * @param {Function} predicate Should return `null` if item skipped
+   * @return '' or joined list of returned strings by predicate
+   */
+  function extract(predicate as function(IItemStack,IIngredient)string) as string {
+    var result = '';
 
     for y in 0 .. Y {
       for x in 0 .. X {
@@ -381,32 +386,9 @@ zenClass Grid {
         if(isNull(ingr)) continue;
 
         for item in ingr.itemArray {
-          if(item.definition.id != id) continue;
-          result += ingr.amount;
-          remove(x, y);
-        }
-      }
-    }
-
-    return result != 0 ? result : default;
-  }
-
-  function extractByTag(keyPath as string, valuePath as string) as int[string] {
-    var result as int[string] = {};
-    for y in 0 .. Y {
-      for x in 0 .. X {
-        val ingr = getIngr(x, y);
-        if(isNull(ingr)) continue;
-
-        for item in ingr.itemArray {
-          val d = D(item.tag);
-          if(!d.check(keyPath)) continue;
-
-          val key = d.getString(keyPath, '');
-          if(key.length == 0) continue;
-
-          val amount = ingr.amount * d.getInt(valuePath, 1);
-          result[key] = amount;
+          val p = predicate(item,ingr);
+          if(isNull(p)) continue;
+          result += p;
           remove(x, y);
           break;
         }
@@ -414,16 +396,6 @@ zenClass Grid {
     }
 
     return result;
-  }
-
-  function extractByTagSerialize(keyPath as string, valuePath as string, serFn as function(string,int)string) as string {
-    var result = '';
-    var first = true;
-    for k, v in extractByTag(keyPath, valuePath) {
-      result ~= (first ? '' : ', ') ~ serFn(k, v);
-      first = false;
-    }
-    return '['~result~']';
   }
 
   #------------------------------------------------------------------
