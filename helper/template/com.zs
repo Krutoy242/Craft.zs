@@ -38,9 +38,11 @@ function(d as IData, path as string, def as IData = null) as IData {
 };
 
 function extractItem(grid as Grid, id as string, default as int = 0) as int {
-  val extracted = grid.extract(function(item as IItemStack, ingr as IIngredient) as string {
+  val extractFnc as function(IItemStack,IIngredient)string =
+  function(item as IItemStack, ingr as IIngredient) as string {
     return item.definition.id == id ? ingr.amount~' ' : null;
-  });
+  };
+  val extracted = grid.extract(extractFnc);
   return extracted == ''
     ? default
     : extracted.replaceAll(' .*', '') as int;
@@ -55,7 +57,7 @@ function extractByTag(grid as Grid, keyPath as string, valuePath as string) as s
     if(amount == -1) return null;
     return key~':'~(ingr.amount * amount)~' ';
   };
-  return grid.extract(extractFnc);
+  return grid.extract(extractFnc).trim();
 }
 
 function extractFluids(grid as Grid, default as string) as string {
