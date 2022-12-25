@@ -103,7 +103,7 @@ mods.thaumcraft.Infusion.registerRecipe(
   "thaumadditions:adaminite_block", # Name
   "INFUSION", # Research
   <thaumadditions:adaminite_block>, # Output
-  3, # Instability
+  15, # Instability
   [<aspect:infernum> * 200, <aspect:visum> * 200, <aspect:draco> * 200, <aspect:spiritus> * 200],
   <thaumadditions:mithrillium_block>, # Central Item
   Grid(["pretty",
