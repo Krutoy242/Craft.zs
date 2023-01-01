@@ -50,3 +50,22 @@ global BucketTag as function(string,crafttweaker.data.IData)IItemStack = functio
 	if (!isNull(b) && !isNull(tag)) { return b.updateTag({Tag: tag}); }
 	return b;
 };
+
+# ########################
+# Get mob soul by its name
+# ########################
+global Soul as function(string)IItemStack = function (name as string) as IItemStack {
+  val soul = itemUtils.getItem("draconicevolution:mob_soul");
+  if (isNull(soul)) return <minecraft:spawn_egg>.withTag({EntityTag: {id: name}});
+  return soul.withTag({EntityName: name});
+};
+
+
+# ########################
+# Fluid Cell is like bucket, but stackable
+# ########################
+global FluidCell as function(string)IItemStack = function (name as string) as IItemStack {
+	val cell = itemUtils.getItem('ic2:fluid_cell');
+	if(isNull(cell)) return Bucket(name);
+	return cell.withTag({Fluid: {FluidName: name, Amount: 1000}});
+};
