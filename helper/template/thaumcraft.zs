@@ -117,9 +117,9 @@ function extractGridAspects(grid as Grid) as string {
     if (splitted.length < 2) continue;
     val name = splitted[0];
     val amount = splitted[1] as int;
-    result += '<aspect:'~name~'>'
-      ~ (amount>1 ? " * " ~ amount : "")
-      ~ (i==0?'':', ');
+    result += (i==0?'':', ')
+      ~ '<aspect:'~name~'>'
+      ~ (amount>1 ? " * " ~ amount : "");
   }
   return result~']';
 }
