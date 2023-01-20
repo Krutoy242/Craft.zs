@@ -64,7 +64,7 @@ zenClass GridBuilder {
         localStyle += newStyle;
       }
     }
-    localStyle += item.definition.id;
+    localStyle += item.definition.id ~ (item.damage <= 0 ? '' : ':'~item.damage);
   }
 
   function writeToMap(map_weight as int[IIngredient]) {

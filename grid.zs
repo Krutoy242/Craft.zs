@@ -362,7 +362,9 @@ zenClass Grid {
 
     var newMap = [] as string[];
     for y in top .. (Y - bottom) {
-      newMap += map[y].substring(left, X - right);
+      val len = map[y].length;
+      if(len > left && len >= X - right)
+        newMap += map[y].substring(left, X - right);
     }
     map = newMap;
 

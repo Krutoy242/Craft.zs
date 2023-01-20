@@ -9,6 +9,7 @@ import scripts.craft.helper.styler.styler;
 import scripts.craft.grid.Grid;
 import scripts.craft.helper.template.com.extractItem;
 import scripts.craft.helper.template.com.extractByTag;
+import scripts.craft.helper.template.com.getOutputStrAnyAmount;
 
 val fnc as function(IItemStack,Grid,string[])string = function(output as IItemStack, grid as Grid, style as string[]) as string {
   if(!(
@@ -17,7 +18,7 @@ val fnc as function(IItemStack,Grid,string[])string = function(output as IItemSt
     || style has 'thaumcraft:arcane_workbench')
   ) return null;
 
-  val output_s_anyAmount = isNull(output) ? "null" : serialize.IIngredient(output.anyAmount());
+  val output_s_anyAmount = getOutputStrAnyAmount(output);
 
   val removedRecipeNames = styler.get(style, {
     removeByRecipeName: { 

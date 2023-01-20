@@ -48,11 +48,13 @@ function extractItem(grid as Grid, id as string, default as int = 0) as int {
     : extracted.replaceAll(' .*', '') as int;
 }
 
-function extractByTag(grid as Grid, keyPath as string, valuePath as string) as string {
+function extractByTag(grid as Grid, keyPath as string, valuePath as string = null) as string {
   val extractFnc as function(IItemStack,IIngredient)string =
   function(item as IItemStack, ingr as IIngredient) as string {
     val key = getD(item.tag, keyPath, '').asString();
     if(key.length == 0) return null;
+    if(isNull(valuePath) || valuePath == '') return key~' ';
+
     val amount = getD(item.tag, valuePath, -1).asInt();
     if(amount == -1) return null;
     return key~':'~(ingr.amount * amount)~' ';
@@ -67,4 +69,8 @@ function extractFluids(grid as Grid, default as string) as string {
     = extractByTag(grid, 'Fluid.FluidName', 'Fluid.Amount');
 
   return result=='' ? default : result;
+}
+
+function getOutputStrAnyAmount(output as IItemStack) as string {
+  return isNull(output) ? "null" : serialize.IIngredient(output.anyAmount());
 }

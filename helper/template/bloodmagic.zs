@@ -9,13 +9,15 @@ import crafttweaker.item.IIngredient;
 import scripts.craft.helper.styler.styler;
 import scripts.craft.grid.Grid;
 import scripts.craft.helper.template.com.extractFluids;
+import scripts.craft.helper.template.com.extractByTag;
+import scripts.craft.helper.template.com.getOutputStrAnyAmount;
 
 val fnc as function(IItemStack,Grid,string[])string = function(output as IItemStack, grid as Grid, style as string[]) as string {
   if(!(
     style has 'bloodmagic:altar'
   )) return null;
 
-  val output_s_anyAmount = isNull(output) ? "null" : serialize.IIngredient(output.anyAmount());
+  val output_s_anyAmount = getOutputStrAnyAmount(output);
 
   val removedRecipeNames = styler.get(style, {
     _ : { 
