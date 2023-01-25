@@ -84,7 +84,7 @@ function serializeTCWorkbench(style as string[], output_s as string, grid as Gri
   }
   return  '\n'~
       '  "'~getThaumRecipeName(output_s)~'", # Name\n'~
-      '  "TWOND_BASE", # Research\n'~
+      '  "FIRSTSTEPS", # Research\n'~
       '  '~visCost~', # Vis cost\n'~
       '  '~aspects~',\n'~
       '  '~output_s~', # Output\n'~
