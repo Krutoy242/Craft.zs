@@ -131,7 +131,7 @@ zenClass Grid {
     for y, row in map {
       if(row.length==0) continue;
       for x in 0 to row.length {
-        if (shapedList.length <= y) shapedList += [] as IIngredient[];
+        while (shapedList.length <= y) shapedList += [] as IIngredient[];
         shapedList[y] = shapedList[y] + opts[row[x]];
       }
     }
