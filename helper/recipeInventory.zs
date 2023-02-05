@@ -51,7 +51,7 @@ zenClass RecipeInventory {
       }
     }
 
-    for i in 4 .. 10 {
+    for i in 1 .. 10 {
       if(style has (i~'x'~i)) {
         grSz = i;
         break;
