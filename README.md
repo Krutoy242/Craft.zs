@@ -23,7 +23,7 @@ A [ZenScript](https://docs.blamejared.com/) auxiliary scripts for quick recipe m
 
 ## Installation
 
-Drop this repo into your Minecraft 1.12 `scripts/craft` folder.
+Drop content of this repo into your Minecraft 1.12 `scripts/craft/` folder.
 
 **Extended Crafting** mod optional.
 
