@@ -31,7 +31,9 @@ val fnc as function(IItemStack,Grid,string[])string = function(output as IItemSt
   if(isNull(className)) return null;
 
   val output_s_one = isNull(output) ? "null" : serialize.IIngredient(output.anyAmount());
-  val removed = "mods.forestry."~className~".removeRecipe("~output_s_one~");\n";
+  val removed = "mods.forestry."~className~(
+    style has "forestry:fabricator" ? ".removeCast" : ".removeRecipe"
+  )~"("~output_s_one~");\n";
 
   var calledMethod = "mods.forestry." ~ className ~ (
     style has "forestry:fabricator" ? ".addCast" : ".addRecipe"
