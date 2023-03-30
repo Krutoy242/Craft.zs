@@ -106,8 +106,8 @@ function serializeTCCrucible(style as string[], output_s as string, grid as Grid
 
 function getThaumRecipeName(output_s as string) as string {
   return output_s
-    .replaceAll("^<", "").replaceAll("(:\\d+)?>.*", "") # Remove CraftTweaker's brackets
-    .replaceAll("thaumcraft:", ""); # Remove mod it its Thaumcraft
+    .replaceAll("^<[^:]+:", "") # Remove mod and opening bracket
+    .replaceAll("(:\\d+)?>.*", ""); # Remove brackets and meta
 }
 
 function extractGridAspects(grid as Grid) as string {
