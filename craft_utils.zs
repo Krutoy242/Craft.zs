@@ -1,6 +1,6 @@
 #priority 4000
 
-#loader crafttweaker reloadable
+#reloadable
 
 import crafttweaker.item.IItemStack;
 

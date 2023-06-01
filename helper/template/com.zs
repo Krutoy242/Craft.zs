@@ -5,7 +5,7 @@ Some common functions used in Craft.zs Helpers Templates
 */
 #priority 9
 
-#loader crafttweaker reloadable
+#reloadable
 
 import crafttweaker.item.IItemStack;
 import crafttweaker.liquid.ILiquidStack;

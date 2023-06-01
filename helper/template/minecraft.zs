@@ -1,7 +1,7 @@
 # Vanilla template priority should be always lower then any other
 #priority 4
 
-#loader crafttweaker reloadable
+#reloadable
 
 import crafttweaker.item.IItemStack;
 import scripts.craft.grid.Grid;

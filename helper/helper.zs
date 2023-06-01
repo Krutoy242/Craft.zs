@@ -9,7 +9,7 @@ import crafttweaker.world.IWorld;
 import scripts.craft.helper.recipeInventory.RecipeInventory;
 import scripts.craft.helper.characterManager.CharacterManager;
 
-#loader crafttweaker reloadable
+#reloadable
 
 #------------------------------------------------------------------
 # Statics

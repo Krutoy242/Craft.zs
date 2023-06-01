@@ -1,6 +1,6 @@
 #priority 5
 
-#loader crafttweaker reloadable
+#reloadable
 
 #modloaded bloodmagic
 

@@ -2,7 +2,7 @@
 
 #priority -1
 
-#loader crafttweaker reloadable
+#reloadable
 
 /*
 

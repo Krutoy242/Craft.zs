@@ -9,7 +9,7 @@ using string styles
 
 #priority 6
 
-#loader crafttweaker reloadable
+#reloadable
 
 import crafttweaker.data.IData;
 import crafttweaker.item.IItemStack;

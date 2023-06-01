@@ -1,7 +1,7 @@
 import crafttweaker.item.IIngredient;
 #priority 4
 
-#loader crafttweaker reloadable
+#reloadable
 
 /* 
 

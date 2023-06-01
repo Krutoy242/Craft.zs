@@ -32,7 +32,7 @@ import crafttweaker.item.IIngredient;
 import crafttweaker.item.IItemStack;
 #priority 2005
 
-#loader crafttweaker reloadable
+#reloadable
 
 zenClass Grid {
 
