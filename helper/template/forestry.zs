@@ -10,8 +10,6 @@ import scripts.craft.grid.Grid;
 import scripts.craft.helper.template.com.extractItem;
 import scripts.craft.helper.template.com.extractFluids;
 
-// server.commandManager.executeCommand(server, '/say '~catl~' '~name);
-
 val fnc as function(IItemStack,Grid,string[])string = function(output as IItemStack, grid as Grid, style as string[]) as string {
   val classMap = {
     "forestry:fabricator": "ThermionicFabricator",
