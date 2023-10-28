@@ -118,34 +118,45 @@ zenClass Craft {
   # Private Methods
   #------------------------------------------------------------------
 
-  function itemName(item as IIngredient) as string {
+  function itemName(item as IIngredient, localize as bool = false) as string {
     if(isNull(item)
       || isNull(item.itemArray)
       || item.itemArray.length < 1
       || isNull(item.itemArray[0]))
       return "null";
+    
+    if (localize) return item.itemArray[0].displayName
+      .replaceAll(":", "_")
+      .replaceAll('§.|"', "");
 
-    return item.itemArray[0].displayName.replaceAll(":", "_").replaceAll('§.|"', "");
+    val it = item.itemArray[0];
+    return it.definition.id
+      .replaceAll(":", "_")
+      ~(it.damage>0 ? '_'~it.damage : '');
   }
 
   function itemCount(item as IIngredient) as string {
     return isNull(item) ? ""
-      : item.amount > 1 ? ("*"~item.amount as string) : "";
+      : item.amount > 1 ? "*"~item.amount : "";
   }
 
-  function itemSerializeName(item as IIngredient) as string {
-    return "["~itemName(item)~"]";
+  function itemSerializeName(item as IIngredient, localize as bool = false) as string {
+    return "["~itemName(item, localize)~"]";
   }
 
-  function itemSerialize(item as IIngredient) as string {
-    return itemSerializeName(item)~itemCount(item);
+  function itemSerialize(item as IIngredient, localize as bool = false) as string {
+    return itemSerializeName(item, localize)~itemCount(item);
   }
 
-  function recipeName(output as IItemStack, gridStr as string[], options as IIngredient[string]) as string { return recipeName(output, Grid(gridStr, options)); }
-  function recipeName(output as IItemStack, grid as Grid) as string {return recipeName(grid.getMainIngredient(), output, grid.uniqueIngredientsCount);}
-  function recipeName(mainInput as IIngredient, output as IItemStack, adsCount as int) as string {
+  function recipeName(output as IItemStack, gridStr as string[], options as IIngredient[string], localize as bool = false) as string {
+    return recipeName(output, Grid(gridStr, options), localize);
+  }
+  function recipeName(output as IItemStack, grid as Grid, localize as bool = false) as string {
+    return recipeName(grid.getMainIngredient(), output, grid.uniqueIngredientsCount, localize);
+  }
+  function recipeName(mainInput as IIngredient, output as IItemStack, adsCount as int, localize as bool = false) as string {
     var ads = adsCount >= 2 ? ("[+"~(adsCount - 1)~"]") : "";
-    return itemSerialize(output) ~ " from "~itemSerializeName(mainInput) ~ ads;
+    return itemSerialize(output, localize) ~ " from "~itemSerializeName(mainInput, localize) ~ ads;
   }
 
   function uniqueRecipeName(output as IItemStack, grid as Grid = null) as string {

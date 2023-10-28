@@ -40,7 +40,7 @@ zenClass GridRecipe {
     # Comment
     val prefixComment = style has "noFancy"
       ? ""
-      : "# "~craft.recipeName(output, gridBuilder.grid) ~ "\n";
+      : "# "~craft.recipeName(output, gridBuilder.grid, true) ~ "\n";
 
     return prefixComment
       ~ styler.pickTemplate(output, gridBuilder.grid, style);
