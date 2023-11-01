@@ -3,6 +3,7 @@
 #reloadable
 
 import crafttweaker.item.IItemStack;
+import crafttweaker.item.IIngredient;
 
 function sortInt(list as int[]) as int[] {
   if(isNull(list)) return null;
@@ -34,6 +35,19 @@ global Bucket as function(string)IItemStack = function (name as string) as IItem
 	if (name == "milk")  return <minecraft:milk_bucket>;
 
 	return <forge:bucketfilled>.withTag({FluidName: name, Amount: 1000});
+};
+
+# ########################
+# Get liquid ingredient
+# Note that <liquid:name> in ingredient list will cause dupe of stackable items
+# ########################
+global LiquidIngr as function(string)IIngredient = function (name as string) as IIngredient {
+  var result = Bucket(name);
+  var a 
+    = itemUtils.getItem('thermalexpansion:tank'); if(!isNull(a)) result |= a.withTag({Fluid: {FluidName: name, Amount: 1000}});
+  a = itemUtils.getItem('thermalexpansion:reservoir'); if(!isNull(a)) result |= a.withTag({Fluid: {FluidName: name, Amount: 1000}});
+  a = itemUtils.getItem('mekanism:machineblock2', 11); if(!isNull(a)) result |= a.withTag({mekData: {fluidTank: {FluidName: name, Amount: 1000}}});
+  return a;
 };
 
 # ########################
