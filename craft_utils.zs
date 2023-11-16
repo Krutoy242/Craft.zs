@@ -34,7 +34,9 @@ global Bucket as function(string)IItemStack = function (name as string) as IItem
 	if (name == "water") return <minecraft:water_bucket>;
 	if (name == "milk")  return <minecraft:milk_bucket>;
 
-	return <forge:bucketfilled>.withTag({FluidName: name, Amount: 1000});
+  val bucket = itemUtils.getItem('forge:bucketfilled');
+  if(isNull(bucket)) return null; // This could happen if no mods installed
+	return bucket.withTag({FluidName: name, Amount: 1000});
 };
 
 # ########################
