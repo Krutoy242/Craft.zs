@@ -44,7 +44,9 @@ global Bucket as function(string)IItemStack = function (name as string) as IItem
 # Note that <liquid:name> in ingredient list will cause dupe of stackable items
 # ########################
 global LiquidIngr as function(string)IIngredient = function (name as string) as IIngredient {
-  return game.getLiquid(name) * 1000;
+  return (game.getLiquid(name) * 1000)
+    .or(<*>.only(function(item) { return false; }))
+    .only(function(item) { return !item.isStackable; });
 };
 
 # ########################
