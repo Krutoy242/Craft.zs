@@ -6,7 +6,7 @@ import crafttweaker.liquid.ILiquidDefinition;
 import crafttweaker.liquid.ILiquidStack;
 import crafttweaker.oredict.IOreDictEntry;
 
-#priority 3000
+#priority 5000
 
 #reloadable
 
