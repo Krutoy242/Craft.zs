@@ -12,6 +12,7 @@ You can add additional custom extensions.
 */
 
 
+#reloadable
 
 # Priority should be lower than craft.zs and grid.zs
 #priority 1999
