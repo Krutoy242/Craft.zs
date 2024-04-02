@@ -308,8 +308,8 @@ zenClass Grid {
     val dlim = (isDense ? ", " : ",") ~ ln;
 
     # "pretty" prefix
-    var s = isShapeless?'"':"[";
-    if(isPretty) s +='"pretty"' ~ dlim;
+    var s = isShapeless?"'":"[";
+    if(isPretty) s +="'pretty'" ~ dlim;
     else if(!isShapeless) s += ln;
 
     # 2d Grid
@@ -331,7 +331,7 @@ zenClass Grid {
           s += l;
         }
       }
-    s += isShapeless?'"':"]";
+    s += isShapeless?"'":"]";
 
     # Add Ingredients Table
     if(!(style has "noMap") && !(style has "merged")) {

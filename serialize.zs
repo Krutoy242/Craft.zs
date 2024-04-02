@@ -15,7 +15,7 @@ zenClass Serialize {
 	zenConstructor() { }
 
   function     wrap(s as string, wraps as string) as string { return wraps[0]~s~wraps[1]; }
-  function     wrap(s as string)   as string { return wrap(s, '""'); }
+  function     wrap(s as string)   as string { return wrap(s, "''"); }
   function  _string(s as string)   as string { return wrap(s); }
   function string__(s as string[], delimiter as string = ", ") as string { return wrap(join(s, delimiter), "[]"); }
   function     args(s as string[]) as string { return wrap(join(s, ", "), '()'); }
@@ -125,7 +125,7 @@ zenClass Serialize {
     var maxLength = 0;
     val isDense = (style has "dense");
     val ln = (isDense ? "" : "\n");
-    val comment_start = isDense ? "/*" : " # ";
+    val comment_start = isDense ? "/*" : " // ";
     val comment_end   = isDense ? "*/" : "";
     val trailComma = (style has "noTrail") ? "" : ",";
     var ingrsCount = ordered_ingrList.length;
