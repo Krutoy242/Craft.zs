@@ -38,9 +38,9 @@ zenClass GridRecipe {
     if(!(style has "noPretty") && (gridBuilder.maxX <= 1 || gridBuilder.maxY <= 1)) style += "noPretty";
 
     # Comment
-    val prefixComment = style has "noFancy"
-      ? ""
-      : "// "~craft.recipeName(output, gridBuilder.grid, true) ~ "\n";
+    val prefixComment = style has "comment"
+      ? "// "~craft.recipeName(output, gridBuilder.grid, true) ~ "\n"
+      : "";
 
     return prefixComment
       ~ styler.pickTemplate(output, gridBuilder.grid, style);

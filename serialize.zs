@@ -143,8 +143,9 @@ zenClass Serialize {
         } else {
           val fancyPad = repeat(isDense ? 0 : maxLength - s_line.length);
           val displayName = ingr.itemArray[0].displayName;
-          val comment = (style has "noFancy") ? "" :
-            fancyPad ~ comment_start ~ displayName ~ comment_end;
+          val comment = (style has "names")
+            ? fancyPad ~ comment_start ~ displayName ~ comment_end
+            : "";
           s +=
             (isDense ? "" : "  ") ~
             s_line ~ comment ~

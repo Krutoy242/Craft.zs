@@ -139,6 +139,6 @@ zenClass RecipeInventory {
       if(!isNull(s)) str += s;
     }
 
-    return serialize.join(str, style has "noFancy" ? "\n" : "\n\n");
+    return serialize.join(str, style has "comment" ? "\n\n" : "\n");
   }
 }

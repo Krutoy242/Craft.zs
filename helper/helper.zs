@@ -131,7 +131,7 @@ zenClass RecipeWork { zenConstructor() {}
       str += inventories[pos].toString(merged ? (style + "merged") : style);
     }
 
-    result += serialize.join(str, style has "noFancy" ? "\n" : "\n\n");
+    result += serialize.join(str, style has "comment" ? "\n\n" : "\n");
 
     if(!(style has "noBucket")) return result.replaceAll(
       '<forge:bucketfilled>\\.withTag\\(\\{FluidName: ("[^"]+?"), Amount: 1000\\}\\)',
