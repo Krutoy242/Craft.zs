@@ -55,6 +55,8 @@ zenClass Craft {
   function      make(output as IItemStack, gridStr as string[], options as IIngredient[string])                         as void {make(output, gridStr,  options, null, false);}
   function      make(output as IItemStack, gridStr as string[], options as IIngredient[string], fnc as IRecipeFunction) as void {make(output, gridStr,  options,  fnc, false);}
   function      make(output as IItemStack, gridStr as string[], options as IIngredient[string], fnc as IRecipeFunction, isShapeless as bool) as void {
+    if (isNull(output)) return;
+
     var grid = Grid(gridStr, options);
     if (!isNull(grid.error)) {
       logger.logWarning("craft.make Grid error: " ~ grid.error ~ "\nGrid:\n" ~ grid.toString());
@@ -101,6 +103,8 @@ zenClass Craft {
   function      remake(output as IItemStack, gridStr as string[], options as IIngredient[string])                         as void {remake(output, gridStr,  options, null, false);}
   function      remake(output as IItemStack, gridStr as string[], options as IIngredient[string], fnc as IRecipeFunction) as void {remake(output, gridStr,  options,  fnc, false);}
   function      remake(output as IItemStack, gridStr as string[], options as IIngredient[string], fnc as IRecipeFunction, isShapeless as bool) as void  {
+    if (isNull(output)) return;
+
     # Automatically remove previous recipe, or recipe tagged "remove" in options
     if (!isNull(options.remove)) {
       for item in options.remove.items {
@@ -124,7 +128,7 @@ zenClass Craft {
       || item.itemArray.length < 1
       || isNull(item.itemArray[0]))
       return "null";
-    
+
     if (localize) return item.itemArray[0].displayName
       .replaceAll(":", "_")
       .replaceAll('§.|"', "");
