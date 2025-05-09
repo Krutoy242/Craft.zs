@@ -28,11 +28,11 @@ Usage:
 
 */
 
+#priority 2005
+#reloadable
+
 import crafttweaker.item.IIngredient;
 import crafttweaker.item.IItemStack;
-#priority 2005
-
-#reloadable
 
 zenClass Grid {
 

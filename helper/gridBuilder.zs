@@ -1,11 +1,11 @@
+#priority 3
+#reloadable
+
 import crafttweaker.item.IIngredient;
 import crafttweaker.item.IItemStack;
 import scripts.craft.grid.Grid;
 import scripts.craft.helper.characterManager.CharacterManager;
 import scripts.craft.helper.styler.styler;
-#priority 3
-
-#reloadable
 
 zenClass GridBuilder {
   var grid2d as IIngredient[][] = [];

@@ -1,10 +1,9 @@
+#priority 1
+#reloadable
+
 import crafttweaker.item.IIngredient;
 import crafttweaker.data.IData;
 import scripts.craft.helper.gridRecipe.GridRecipe;
-#priority 1
-
-#reloadable
-
 
 zenClass RecipeInventory {
   # Two values in array means recipes should be

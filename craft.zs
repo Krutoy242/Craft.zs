@@ -21,7 +21,6 @@ Example
 */
 
 #priority 2000
-
 #reloadable
 
 import crafttweaker.item.IIngredient;

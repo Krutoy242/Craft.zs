@@ -1,3 +1,6 @@
+#priority 5000
+#reloadable
+
 import crafttweaker.block.IBlock;
 import crafttweaker.item.IIngredient;
 import crafttweaker.item.IItemStack;
@@ -5,11 +8,6 @@ import crafttweaker.item.WeightedItemStack;
 import crafttweaker.liquid.ILiquidDefinition;
 import crafttweaker.liquid.ILiquidStack;
 import crafttweaker.oredict.IOreDictEntry;
-
-#priority 5000
-
-#reloadable
-
 
 zenClass Serialize {
 	zenConstructor() { }
