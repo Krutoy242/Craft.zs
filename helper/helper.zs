@@ -87,7 +87,7 @@ zenClass RecipeWork { zenConstructor() {}
   }
 
 
-  function logOutput(style as string[], player as IPlayer) as string {
+  function logOutput(style as string[], player as IPlayer, currentItem as IItemStack) as string {
 
     # Gather information and
     # set output items based on hotbar
@@ -97,8 +97,12 @@ zenClass RecipeWork { zenConstructor() {}
     for pos in inventories_order {
       for gridRecipe in inventories[pos].gridRecipes {
         if(gridRecipe.haveData()) acCount += 1;
-        if(isNull(gridRecipe.output)) {
-          val out = player.getInventoryStack(min(i, player.inventorySize));
+        if(isNull(gridRecipe.output) && i < player.inventorySize) {
+          var out as IItemStack = player.getInventoryStack(i);
+          while (i < player.inventorySize && (isNull(out) || currentItem has out)) {
+            i += 1;
+            out = player.getInventoryStack(i);
+          }
           gridRecipe.setOutput(out);
           i += 1;
         }
@@ -190,7 +194,7 @@ events.onPlayerInteractBlock(function(e as PlayerInteractBlockEvent) {
     player.sendChat(workResult);
     recipeWork.flagMerged();
   } else {
-    val playerMessage = recipeWork.logOutput(style, player);
+    val playerMessage = recipeWork.logOutput(style, player, currentItem);
     player.sendChat(playerMessage);
     recipeWork.reset();
   }
