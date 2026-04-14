@@ -39,9 +39,9 @@ zenClass Craft {
   # For example, Craft.zs can be extended with Extended Crafting
   # recipe adding function.
   var extensions as Extension = null;
+  var postProcessors as [function(string, IItemStack, Grid, string[])string] = [] as [function(string, IItemStack, Grid, string[])string];
 
-	zenConstructor() {}
-
+  zenConstructor() {}
   #------------------------------------------------------------------
   # Public Methods
   #------------------------------------------------------------------
@@ -177,6 +177,10 @@ zenClass Craft {
       while(!isNull(lastExt.next)) lastExt = lastExt.next;
       lastExt.next = ext;
     }
+  }
+
+  function pushPostProcessor(pp as function(string, IItemStack, Grid, string[])string) as void {
+    postProcessors += pp;
   }
 }
 global craft as Craft = Craft();

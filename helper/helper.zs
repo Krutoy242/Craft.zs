@@ -137,11 +137,6 @@ zenClass RecipeWork { zenConstructor() {}
 
     result += serialize.join(str, style has "comment" ? "\n\n" : "\n");
 
-    if(!(style has "noBucket")) return result.replaceAll(
-      '<forge:bucketfilled>\\.withTag\\(\\{FluidName: ("[^"]+?"), Amount: 1000\\}\\)',
-      'Bucket($1)'
-    );
-
     return result;
   }
 }

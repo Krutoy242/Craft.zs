@@ -1,5 +1,4 @@
 #priority 2
-
 #reloadable
 
 import crafttweaker.item.IItemStack;
@@ -42,7 +41,13 @@ zenClass GridRecipe {
       ? "// "~craft.recipeName(output, gridBuilder.grid, true) ~ "\n"
       : "";
 
-    return prefixComment
+    var result = prefixComment
       ~ styler.pickTemplate(output, gridBuilder.grid, style);
+
+    for pp in craft.postProcessors {
+      result = pp(result, output, gridBuilder.grid, style);
+    }
+
+    return result;
   }
 }

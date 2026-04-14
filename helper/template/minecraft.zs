@@ -54,3 +54,13 @@ val fnc as function(IItemStack,Grid,string[])string = function(output as IItemSt
 // We forced to define function before calling registerTemplate()
 // because in other case only first call of registerTemplate() would added
 styler.registerTemplate(fnc);
+
+craft.pushPostProcessor(
+  function(recipeString as string, output as IItemStack, grid as Grid, style as string[]) as string {
+    if(style has "noBucket") return recipeString;
+    return recipeString.replaceAll(
+      '<forge:bucketfilled>\\.withTag\\(\\{FluidName: ("[^"]+?"), Amount: 1000\\}\\)',
+      'Bucket($1)'
+    );
+  }
+);
