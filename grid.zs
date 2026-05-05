@@ -114,7 +114,7 @@ zenClass Grid {
       if(row.length==0) continue;
       for x in 0 to row.length {
         var c = getRaw(x,y);
-        c = !isNull(c) ? c : " ";
+        c = c ?? " ";
         push(y, c);
       }
     }
@@ -299,7 +299,7 @@ zenClass Grid {
 
   # Return string representation of grid
   function toString(_style as string[] = null) as string {
-    val style as string[] = isNull(_style) ? [] : _style;
+    val style as string[] = _style ?? [];
 
     val isDense     =  (style has "dense");
     val isShapeless =  (style has "shapeless");

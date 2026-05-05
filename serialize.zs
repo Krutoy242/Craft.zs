@@ -40,7 +40,7 @@ zenClass Serialize {
     return s;
   }
 
-  function IIngredient(a as IIngredient) as string { return !isNull(a) ? a.commandString : 'null'; }
+  function IIngredient(a as IIngredient) as string { return a?.commandString ?? 'null'; }
   function IIngredient(a as crafttweaker.item.IIngredient, style as string[]) as string {
     if(a.itemArray.length != 1) return IIngredient(a);
 
@@ -77,7 +77,7 @@ zenClass Serialize {
   }
 
   function IItemStack(a as crafttweaker.item.IItemStack) as string {
-    return !isNull(a) ? a.commandString : 'null';
+    return a?.commandString ?? 'null';
   }
 
   function IItemStack(a as crafttweaker.item.IItemStack, tail as string) as string {

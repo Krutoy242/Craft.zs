@@ -48,7 +48,7 @@ zenClass Styler {
   }
 
   function catalyst(itemId as string, styleKey as string = null) as void {
-    catalysts[itemId] = !isNull(styleKey) ? styleKey : itemId;
+    catalysts[itemId] = styleKey ?? itemId;
   }
 
   function registerTemplate(fnc as function(IItemStack,Grid,string[])string) as void {

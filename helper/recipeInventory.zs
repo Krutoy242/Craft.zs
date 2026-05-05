@@ -71,7 +71,7 @@ zenClass RecipeInventory {
     # Item is not nbtMap or have no id data
     if(isNull(it.asMap()) || isNull(it.id)) return;
     
-    val slot = isNull(it.Slot) ? index : it.Slot.asInt();
+    val slot = it.Slot?.asInt() ?? index;
     val slotData = getSlotData(slot);
 
     # This slot is out of recipes space
@@ -79,8 +79,8 @@ zenClass RecipeInventory {
 
     # Get values fro NBT
     val id     = it.id.asString();
-    val count  = isNull(it.Count) ? 1 : it.Count.asInt();
-    val damage = isNull(it.Damage) ? 0 : it.Damage.asInt();
+    val count = it.Count?.asInt() ?? 1;
+    val damage = it.Damage?.asInt() ?? 0;
 
     # Create ItemStack
     var itemStack = itemUtils.getItem(id, damage);
@@ -89,14 +89,14 @@ zenClass RecipeInventory {
     if (!isNull(it.tag))   itemStack  = itemStack.withTag(it.tag);
 
     # Add empty GridRecipes if needed
-    val gridIndex = isNull(slotData.gridIndex) ? 0 : slotData.gridIndex.asInt();
+    val gridIndex = slotData.gridIndex?.asInt() ?? 0;
     while(gridRecipes.length <= gridIndex) { gridRecipes += GridRecipe(style); }
     val gridRecipe = gridRecipes[gridIndex];
 
     if      (!isNull(slotData.isOutput  )) { gridRecipe.setOutput(itemStack); }
     else if (!isNull(slotData.isCatalyst)) { gridRecipe.gridBuilder.insertCatalyst(itemStack); }
     else {
-      val localSlot = isNull(slotData.slot) ? slot : slotData.slot.asInt();
+      val localSlot = slotData.slot?.asInt() ?? slot;
       gridRecipe.gridBuilder.insert(itemStack, localSlot, H > 0 ? grSz : W);
     }
   }

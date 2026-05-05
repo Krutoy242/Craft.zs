@@ -112,7 +112,7 @@ zenClass GridBuilder {
       var s = "";
       for it in line {
         val c = map_flipped[it];
-        s += !isNull(c) ? c : " ";
+        s += c ?? " ";
       }
       gridStr += s;
     }
