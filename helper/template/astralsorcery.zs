@@ -66,7 +66,11 @@ styler.registerTemplate(fnc);
 
 function serializeAltair(style as string[], output as IItemStack, grid as Grid, havConstellation as string) as string {
   val fluidAmount = extractFluids(grid, '1500').replaceAll('^[^:]+:(\\d+).*', '$1');
-  val constellation = havConstellation ? ', "'~extractByTag(grid, 'astralsorcery.constellationName')~'"' : '';
+
+  val getConstellationName = function(item as IItemStack) as string {
+    return item.tag?.astralsorcery?.constellationName?.asString() ?? '';
+  };
+  val constellation = havConstellation ? ', "'~extractByTag(grid, getConstellationName)~'"' : '';
 
   // Remove Pretty tag
   return  '\n'~

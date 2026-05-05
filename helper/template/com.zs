@@ -13,30 +13,6 @@ import crafttweaker.data.IData;
 import scripts.craft.grid.Grid;
 import crafttweaker.item.IIngredient;
 
-// Function taken from
-// https://github.com/Krutoy242/D.zs
-static getD as function(IData,string,IData)IData= 
-function(d as IData, path as string, def as IData = null) as IData {
-  if (isNull(path) || path == "" || isNull(d)) return def;
-
-  var descend as IData = null;
-  for tag in path.split("[\\.\\[\\]]") {
-    if (tag == "") continue;
-    if(isNull(descend)) descend = d;
-
-    var member as IData = null;
-    if (tag.matches("\\d+")) {
-      var num = tag as int;
-      if (descend.length > num) member = descend[num];
-    } else if(!isNull(descend.asMap())) {
-      member = descend.memberGet(tag);
-    }
-    if (!isNull(member)) descend = member;
-    else return def;
-  }
-  return descend;
-};
-
 function extractItem(grid as Grid, id as string, default as int = 0) as int {
   val extractFnc as function(IItemStack,IIngredient)string =
   function(item as IItemStack, ingr as IIngredient) as string {
@@ -48,14 +24,15 @@ function extractItem(grid as Grid, id as string, default as int = 0) as int {
     : extracted.replaceAll(' .*', '') as int;
 }
 
-function extractByTag(grid as Grid, keyPath as string, valuePath as string = null) as string {
+function extractByTag(grid as Grid, keyAccessor as function(IItemStack)string, valueAccessor as function(IItemStack)int = null) as string {
+  val valueAccessorExist = !isNull(valueAccessor);
   val extractFnc as function(IItemStack,IIngredient)string =
   function(item as IItemStack, ingr as IIngredient) as string {
-    val key = getD(item.tag, keyPath, '').asString();
+    val key = keyAccessor(item);
     if(key.length == 0) return null;
-    if(isNull(valuePath) || valuePath == '') return key~' ';
+    if(!valueAccessorExist) return key~' ';
 
-    val amount = getD(item.tag, valuePath, -1).asInt();
+    val amount = valueAccessor(item);
     if(amount == -1) return null;
     return key~':'~(ingr.amount * amount)~' ';
   };
@@ -63,11 +40,16 @@ function extractByTag(grid as Grid, keyPath as string, valuePath as string = nul
 }
 
 function extractFluids(grid as Grid, default as string) as string {
-  var result
-    = extractByTag(grid, 'FluidName', 'Amount');
-  if(result=='') result
-    = extractByTag(grid, 'Fluid.FluidName', 'Fluid.Amount');
+  // Helper accessors for fluid data
+  val getFluidName = function(item as IItemStack) as string {
+    return item.tag?.FluidName?.asString() ?? item.tag?.Fluid?.FluidName?.asString() ?? '';
+  };
+  val getAmount = function(item as IItemStack) as int {
+    val amount = item.tag?.Amount?.asInt() ?? item.tag?.Fluid?.Amount?.asInt();
+    return isNull(amount) ? -1 : amount;
+  };
 
+  var result = extractByTag(grid, getFluidName, getAmount);
   return result=='' ? default : result;
 }
 
