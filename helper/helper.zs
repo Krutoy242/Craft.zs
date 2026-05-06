@@ -168,10 +168,9 @@ events.onPlayerInteractBlock(function(e as PlayerInteractBlockEvent) {
   if (isNull(data)) return;
 
   val itemsList = data.Items;
-  if (isNull(itemsList) || isNull(itemsList.asList()) || itemsList.length <= 0) return;
+  if (isNull(itemsList?.asList()) || itemsList.length <= 0) return;
 
-  val style as string[] = (!isNull(currentItem.tag) && !isNull(currentItem.tag.style))
-    ? currentItem.tag.style.asString().split(" ") : [];
+  val style as string[] = currentItem.tag?.style?.asString().split(" ") ?? [];
 
   /*
     Create new map entry
