@@ -11,23 +11,23 @@ import crafttweaker.world.IWorld;
 import scripts.craft.helper.recipeInventory.RecipeInventory;
 import scripts.craft.helper.characterManager.CharacterManager;
 
-#------------------------------------------------------------------
-# Statics
-#------------------------------------------------------------------
+//------------------------------------------------------------------
+// Statics
+//------------------------------------------------------------------
 
-# ID of item, right clicking with will cause helper triggers
-static toolItemID as string = "minecraft:bone";
+// ID of item, right clicking with will cause helper triggers
+static toolItemID as string = 'minecraft:bone';
 
-# Set this to "false" if you dont want tool item caused recipe
-# printings in crafttweaker.log.
-# When set to "false", only item with NBT tag would cause triggers
+// Set this to 'false' if you dont want tool item caused recipe
+// printings in crafttweaker.log.
+// When set to 'false', only item with NBT tag would cause triggers
 static isToolNoTag as bool = true;
 
-
-#------------------------------------------------------------------
-# Handlers
-#------------------------------------------------------------------
-zenClass RecipeWork { zenConstructor() {}
+//------------------------------------------------------------------
+// Handlers
+//------------------------------------------------------------------
+zenClass RecipeWork {
+  zenConstructor() {}
 
   var inventories as RecipeInventory[string] = {};
   var inventories_order as string[] = [];
@@ -39,33 +39,33 @@ zenClass RecipeWork { zenConstructor() {}
     merged = false;
   }
 
-  # Add inventory to list, update order
-  # Return true if old inventory was rewritten for same position
+  // Add inventory to list, update order
+  // Return true if old inventory was rewritten for same position
   function pushInventory(inventoryPos as string, recipeInventory as RecipeInventory) as bool {
     val rewritten = !isNull(inventories[inventoryPos]);
     inventories[inventoryPos] = recipeInventory;
-    if(!rewritten) inventories_order += inventoryPos;
+    if (!rewritten) inventories_order += inventoryPos;
     return rewritten;
   }
 
   function workOn(block as IBlock, itemsList as IData, inventoryPos as string, style as string[]) as string {
-    val blockFullId = block.definition.id ~ ":" ~ block.meta;
+    val blockFullId = block.definition.id ~ ':' ~ block.meta;
     val recipeInventory = RecipeInventory(blockFullId, itemsList, style);
     val acCount = recipeInventory.countActualRecipes();
-    if(acCount <= 0) return "Inventory has §nno recipes§r.";
+    if (acCount <= 0) return 'Inventory has §nno recipes§r.';
 
     val rewritten = pushInventory(inventoryPos, recipeInventory);
-    return "Inventory with §n" ~ acCount ~ "§r grid" ~ (acCount > 1 ? "s" : "") ~
-      (rewritten ? " rewritten." : " memored.");
+    return 'Inventory with §n' ~ acCount ~ '§r grid' ~ (acCount > 1 ? 's' : '')
+    ~ (rewritten ? ' rewritten.' : ' memored.');
   }
 
-  function flagMerged() { merged = true;}
+  function flagMerged() { merged = true; }
 
-  # Important!
-  # If "merged" mode used, this function should be called
-  # BEFORE any gridRecipe serialization
+  // Important!
+  // If 'merged' mode used, this function should be called
+  // BEFORE any gridRecipe serialization
   function merged_updateAndSerialize(style as string[]) as string {
-    if(!merged) return null;
+    if (!merged) return null;
 
     val map_weight as int[IIngredient] = {};
     for pos in inventories_order {
@@ -74,7 +74,7 @@ zenClass RecipeWork { zenConstructor() {}
       }
     }
 
-    var mergedMap = CharacterManager().getMap(map_weight);
+    val mergedMap = CharacterManager().getMap(map_weight);
     var order = '';
     for pos in inventories_order {
       for gridRecipe in inventories[pos].gridRecipes {
@@ -86,20 +86,18 @@ zenClass RecipeWork { zenConstructor() {}
     return serialize.IIngredient_string_(mergedMap, style, order);
   }
 
-
   function logOutput(style as string[], player as IPlayer, currentItem as IItemStack) as string {
-
-    # Gather information and
-    # set output items based on hotbar
+    // Gather information and
+    // set output items based on hotbar
     val inventoriesCount = inventories.length;
     var acCount = 0;
     var i = 0;
     for pos in inventories_order {
       for gridRecipe in inventories[pos].gridRecipes {
-        if(gridRecipe.haveData()) acCount += 1;
-        if(isNull(gridRecipe.output) && i < player.inventorySize) {
+        if (gridRecipe.haveData()) acCount += 1;
+        if (isNull(gridRecipe.output) && i < player.inventorySize) {
           var out as IItemStack = player.getInventoryStack(i);
-          while (i < player.inventorySize && (isNull(out) || currentItem has out)) {
+          while i < player.inventorySize && (isNull(out) || currentItem has out) {
             i += 1;
             out = player.getInventoryStack(i);
           }
@@ -109,57 +107,58 @@ zenClass RecipeWork { zenConstructor() {}
       }
     }
 
-    if(acCount <= 0) return "Inventory has §nno recipes§r.";
+    if (acCount <= 0) return 'Inventory has §nno recipes§r.';
 
     print(
-      "🛠 craft.zs recipes:\n" ~
-      toString(style)
+      '🛠 craft.zs recipes:\n'
+      ~ toString(style)
     );
 
-
-    return
-      (inventoriesCount>1 ? "§6"~inventoriesCount~"§r Inventories" : "Inventory") ~
-      " with §n" ~ acCount ~ "§r grid" ~ (acCount > 1 ? "s" : "") ~
-      " printed into §acrafttweaker.log";
+    return;
+    (inventoriesCount > 1 ? '§6' ~ inventoriesCount ~ '§r Inventories' : 'Inventory')
+    ~ ' with §n' ~ acCount ~ '§r grid' ~ (acCount > 1 ? 's' : '')
+    ~ ' printed into §acrafttweaker.log';
   }
 
   function toString(style as string[]) as string {
     var result = '';
 
-    if(merged) result = "val ingrs = {\n" ~
-      merged_updateAndSerialize(style) ~ "\n" ~
-      "} as IIngredient[string];\n\n";
+    if (merged) {
+      result = 'val ingrs = {\n'
+      ~ merged_updateAndSerialize(style) ~ '\n'
+      ~ '} as IIngredient[string];\n\n';
+    }
 
     var str as string[] = [];
     for pos in inventories_order {
-      str += inventories[pos].toString(merged ? (style + "merged") : style);
+      str += inventories[pos].toString(merged ? style + 'merged' : style);
     }
 
-    result += serialize.join(str, style has "comment" ? "\n\n" : "\n");
+    result += serialize.join(str, style has 'comment' ? '\n\n' : '\n');
 
     return result;
   }
 }
 static recipeWorks as RecipeWork[IPlayer] = {};
 
-#------------------------------------------------------------------
-# Event
-#------------------------------------------------------------------
-events.onPlayerInteractBlock(function(e as PlayerInteractBlockEvent) {
+//------------------------------------------------------------------
+// Event
+//------------------------------------------------------------------
+events.onPlayerInteractBlock(function (e as PlayerInteractBlockEvent) {
   /*
     Check requirments
   */
 
   val world as IWorld = e.world;
-  if(isNull(world) || world.remote) return;
+  if (isNull(world) || world.remote) return;
 
   val player as IPlayer = e.player;
   if (isNull(player) || !player.creative) return;
 
   val currentItem = e.item;
   if (isNull(currentItem)) return;
-  if(currentItem.definition.id != toolItemID) return;
-  if(!isToolNoTag && isNull(currentItem.tag)) return;
+  if (currentItem.definition.id != toolItemID) return;
+  if (!isToolNoTag && isNull(currentItem.tag)) return;
 
   val block as IBlock = world.getBlock(e.x, e.y, e.z);
   if (isNull(block)) return;
@@ -170,24 +169,25 @@ events.onPlayerInteractBlock(function(e as PlayerInteractBlockEvent) {
   val itemsList = data.Items;
   if (isNull(itemsList?.asList()) || itemsList.length <= 0) return;
 
-  val style as string[] = currentItem.tag?.style?.asString().split(" ") ?? [];
+  val style as string[] = currentItem.tag?.style?.asString()?.split(' ') ?? [];
 
   /*
     Create new map entry
   */
-  if(isNull(recipeWorks[player])) recipeWorks[player] = RecipeWork();
-  var recipeWork = recipeWorks[player];
+  if (isNull(recipeWorks[player])) recipeWorks[player] = RecipeWork();
+  val recipeWork = recipeWorks[player];
 
   /*
     Iterate items in inventory
   */
-  val inventoryPos = e.x ~":"~ e.y ~":"~ e.z;
+  val inventoryPos = e.x ~ ':' ~ e.y ~ ':' ~ e.z;
   val workResult = recipeWork.workOn(block, itemsList, inventoryPos, style);
 
-  if(player.isSneaking) {
+  if (player.isSneaking) {
     player.sendChat(workResult);
     recipeWork.flagMerged();
-  } else {
+  }
+  else {
     val playerMessage = recipeWork.logOutput(style, player, currentItem);
     player.sendChat(playerMessage);
     recipeWork.reset();

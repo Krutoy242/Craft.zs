@@ -9,7 +9,7 @@
 Configure your tool, by giving yourself bone with NBT tag.
 use command:
 
-/give @p bone 1 0 {style: "tags with spaces between"}
+/give @p bone 1 0 {style: 'tags with spaces between'}
 
 Avaliable style tags:
 
@@ -33,12 +33,11 @@ noTransformers: No `.anyDamage()` or `.withTag({})` if ingredient
 
 */
 
-
 val toolItem = itemUtils.getItem(scripts.craft.helper.helper.toolItemID);
 mods.jei.JEI.addItem(toolItem.withTag({
-  style: "comment noPretty noBucket noTrail names noTransformers noOre noForceAmount",
+  style: 'comment noPretty noBucket noTrail names noTransformers noOre noForceAmount',
 
-  ench:[{lvl:1,id:0}], // Add enchant glow
+  ench:[{ lvl:1,id:0 }], // Add enchant glow
   enchantmentColor:16711680, // Random Things can change color with this tag
-  display:{Name:"Bone §b(no styles)"},
+  display:{ Name:'Bone §b(no styles)' },
 }));

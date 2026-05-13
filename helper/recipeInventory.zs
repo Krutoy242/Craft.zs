@@ -1,57 +1,56 @@
 #priority 1
 #reloadable
 
-import crafttweaker.item.IIngredient;
 import crafttweaker.data.IData;
 import scripts.craft.helper.gridRecipe.GridRecipe;
 
 zenClass RecipeInventory {
-  # Two values in array means recipes should be
-  #   considering as bunch of recipes in one invernoty
-  # String is RegExp. trailing ":0" is optional
+  // Two values in array means recipes should be
+  //   considering as bunch of recipes in one invernoty
+  // String is RegExp. trailing ':0' is optional
   static blockSizes as int[][string] = {
-    "extendedcrafting:table_advanced":            [5],
-    "extendedcrafting:table_elite":               [7],
-    "extendedcrafting:table_ultimate":            [9],
-    "ironchest:iron_chest":                       [ 9, 6],
-    "ironchest:iron_chest:1":                     [ 9, 9],
-    "ironchest:iron_chest:(2|5|6)":               [12, 9],
-    "draconicevolution:draconium_chest":          [26,10],
-    "minecraft:chest.*":                          [ 9, 3],
-    "rustic:vase.*":                              [ 9, 3],
-    "rustic:cabinet.*":                           [ 9, 3],
-    "bibliocraft:framedchest.*":                  [ 9, 3],
-    "extrautils2:largishchest:3":                 [ 9, 3],
-    "actuallyadditions:block_giant_chest":        [13, 9],
-    "actuallyadditions:block_giant_chest_medium": [13,18],
-    "actuallyadditions:block_giant_chest_large":  [13,27],
+    'extendedcrafting:table_advanced':            [5],
+    'extendedcrafting:table_elite':               [7],
+    'extendedcrafting:table_ultimate':            [9],
+    'ironchest:iron_chest':                       [9, 6],
+    'ironchest:iron_chest:1':                     [9, 9],
+    'ironchest:iron_chest:(2|5|6)':               [12, 9],
+    'draconicevolution:draconium_chest':          [26,10],
+    'minecraft:chest.*':                          [9, 3],
+    'rustic:vase.*':                              [9, 3],
+    'rustic:cabinet.*':                           [9, 3],
+    'bibliocraft:framedchest.*':                  [9, 3],
+    'extrautils2:largishchest:3':                 [9, 3],
+    'actuallyadditions:block_giant_chest':        [13, 9],
+    'actuallyadditions:block_giant_chest_medium': [13,18],
+    'actuallyadditions:block_giant_chest_large':  [13,27],
   } as int[][string];
 
-  var W as int = 3; # Width  of current recipe inventory
-  var H as int = 0; # Height of current recipe inventory
-  var grSz as int = 3; # Size of grid in this inventory. Default is 3x3. Could be 5x5, 7x7, etc.
+  var W as int = 3; // Width  of current recipe inventory
+  var H as int = 0; // Height of current recipe inventory
+  var grSz as int = 3; // Size of grid in this inventory. Default is 3x3. Could be 5x5, 7x7, etc.
   var gridRecipes as GridRecipe[] = [];
 
   zenConstructor(id as string, itemsList as IData, style as string[]) {
-    # Find chest
+    // Find chest
     var sizeWH as int[] = null;
     for name, arr in blockSizes {
-      if(id.matches(name ~ "(:0)?")) {
+      if (id.matches(name ~ '(:0)?')) {
         sizeWH = arr;
         break;
       }
     }
 
-    # Init complex inventory with multiple recipes
-    if(!isNull(sizeWH)) {
+    // Init complex inventory with multiple recipes
+    if (!isNull(sizeWH)) {
       W = sizeWH[0];
-      if(sizeWH.length > 1) {
+      if (sizeWH.length > 1) {
         H = sizeWH[1];
       }
     }
 
     for i in 1 .. 10 {
-      if(style has (i~'x'~i)) {
+      if (style has (i ~ 'x' ~ i)) {
         grSz = i;
         break;
       }
@@ -63,37 +62,36 @@ zenClass RecipeInventory {
   }
 
   function processInventoryItem(
-    index as int,     # Current inventory slot index
-    it as IData,      # Item in NBT form
-    style as string[] # Helper style
+    index as int,     // Current inventory slot index
+    it as IData,      // Item in NBT form
+    style as string[] // Helper style
   ) as void {
+    // Item is not nbtMap or have no id data
+    if (isNull(it.asMap()) || isNull(it.id)) return;
 
-    # Item is not nbtMap or have no id data
-    if(isNull(it.asMap()) || isNull(it.id)) return;
-    
     val slot = it.Slot?.asInt() ?? index;
     val slotData = getSlotData(slot);
 
-    # This slot is out of recipes space
-    if(isNull(slotData)) return;
+    // This slot is out of recipes space
+    if (isNull(slotData)) return;
 
-    # Get values fro NBT
+    // Get values fro NBT
     val id     = it.id.asString();
     val count = it.Count?.asInt() ?? 1;
     val damage = it.Damage?.asInt() ?? 0;
 
-    # Create ItemStack
+    // Create ItemStack
     var itemStack = itemUtils.getItem(id, damage);
     if (isNull(itemStack)) return;
     if (count != 1)        itemStack *= count;
     if (!isNull(it.tag))   itemStack  = itemStack.withTag(it.tag);
 
-    # Add empty GridRecipes if needed
+    // Add empty GridRecipes if needed
     val gridIndex = slotData.gridIndex?.asInt() ?? 0;
-    while(gridRecipes.length <= gridIndex) { gridRecipes += GridRecipe(style); }
+    while gridRecipes.length <= gridIndex { gridRecipes += GridRecipe(style); }
     val gridRecipe = gridRecipes[gridIndex];
 
-    if      (!isNull(slotData.isOutput  )) { gridRecipe.setOutput(itemStack); }
+    if      (!isNull(slotData.isOutput)) { gridRecipe.setOutput(itemStack); }
     else if (!isNull(slotData.isCatalyst)) { gridRecipe.gridBuilder.insertCatalyst(itemStack); }
     else {
       val localSlot = slotData.slot?.asInt() ?? slot;
@@ -101,32 +99,32 @@ zenClass RecipeInventory {
     }
   }
 
-  # Return type of this slot
+  // Return type of this slot
   function getSlotData(slot as int) as IData {
-    if(H==0) return {}; # This is unknown inventory
+    if (H == 0) return {}; // This is unknown inventory
 
     val _x = slot % W;
-    if(_x >= W - (W%(grSz+1))) return null; # Out of recipes space
+    if (_x >= W - (W % (grSz + 1))) return null; // Out of recipes space
 
     val _y = (slot / W) as int;
-    val netX = (_x/(grSz+1)) as int;
-    val netY = (_y/grSz) as int;
-    val gridWidth = (W / (grSz+1)) as int;
+    val netX = (_x / (grSz + 1)) as int;
+    val netY = (_y / grSz) as int;
+    val gridWidth = (W / (grSz + 1)) as int;
     val gridIndex = netY * gridWidth + netX;
 
-    val x = _x % (grSz+1);
+    val x = _x % (grSz + 1);
     val y = _y % grSz;
-    if(x == grSz) {
-      if(y == grSz/2) return {gridIndex: gridIndex,   isOutput:true};
-      else            return {gridIndex: gridIndex, isCatalyst:true};
+    if (x == grSz) {
+      if (y == grSz / 2) return { gridIndex: gridIndex,   isOutput:true };
+      else            return { gridIndex: gridIndex, isCatalyst:true };
     }
-    return {gridIndex: gridIndex, slot: y*grSz+x};
+    return { gridIndex: gridIndex, slot: y * grSz + x };
   }
 
   function countActualRecipes() as int {
     var n = 0;
     for gridRecipe in gridRecipes {
-      if(gridRecipe.haveData()) n += 1;
+      if (gridRecipe.haveData()) n += 1;
     }
     return n;
   }
@@ -135,9 +133,9 @@ zenClass RecipeInventory {
     var str as string[] = [];
     for gridRecipe in gridRecipes {
       val s = gridRecipe.toString(style);
-      if(!isNull(s)) str += s;
+      if (!isNull(s)) str += s;
     }
 
-    return serialize.join(str, style has "comment" ? "\n\n" : "\n");
+    return serialize.join(str, style has 'comment' ? '\n\n' : '\n');
   }
 }

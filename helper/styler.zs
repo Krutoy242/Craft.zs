@@ -22,29 +22,29 @@ zenClass Styler {
   var firstTemplate as LinkedList;
   var lastTemplate as LinkedList;
 
-  # This items in catalyst slot would add this styles
+  // This items in catalyst slot would add this styles
   val catalysts as string[string] = {};
 
   zenConstructor() {}
 
   function get(style as string[], d as IData) as string {
-    if(isNull(d)) return "";
+    if (isNull(d)) return '';
     val asMap = d.asMap();
-    if(isNull(asMap)) return d.asString();
+    if (isNull(asMap)) return d.asString();
 
-    # Weird stuff.
-    # When iterating "stuff".asMap()
-    # [key, value] would be ["stuff", "stuff"]
-    # So i forced to check serialized data
+    // Weird stuff.
+    // When iterating 'stuff'.asMap()
+    // [key, value] would be ['stuff', 'stuff']
+    // So i forced to check serialized data
     val asStr = d.asString();
-    if(!asStr.startsWith("{")) return asStr;
+    if (!asStr.startsWith('{')) return asStr;
 
     for k,v in asMap {
-      if(k == "_") continue;
-      if(style has k) return get(style, v);
+      if (k == '_') continue;
+      if (style has k) return get(style, v);
     }
 
-    return get(style, d.memberGet("_"));
+    return get(style, d.memberGet('_'));
   }
 
   function catalyst(itemId as string, styleKey as string = null) as void {
@@ -63,12 +63,12 @@ zenClass Styler {
     }
   }
 
-  # Iterate over all templates
+  // Iterate over all templates
   function pickTemplate(output as IItemStack, grid as Grid, style as string[]) as string {
     var tplt = firstTemplate;
-    while(!isNull(tplt)) {
+    while !isNull(tplt) {
       val result = tplt.fnc(output, grid, style);
-      if(!isNull(result)) return result;
+      if (!isNull(result)) return result;
       tplt = tplt.next;
     }
     return '<Template iteration Error>';
