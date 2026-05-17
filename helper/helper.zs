@@ -114,8 +114,7 @@ zenClass RecipeWork {
       ~ toString(style)
     );
 
-    return;
-    (inventoriesCount > 1 ? '§6' ~ inventoriesCount ~ '§r Inventories' : 'Inventory')
+    return (inventoriesCount > 1 ? '§6' ~ inventoriesCount ~ '§r Inventories' : 'Inventory')
     ~ ' with §n' ~ acCount ~ '§r grid' ~ (acCount > 1 ? 's' : '')
     ~ ' printed into §acrafttweaker.log';
   }
