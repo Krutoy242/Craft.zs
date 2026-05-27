@@ -113,11 +113,16 @@ function getThaumRecipeName(output_s as string) as string {
 
 function extractGridAspects(grid as Grid) as string {
   val getAspectKey = function (item as IItemStack) as string {
-    return item.tag?.Aspects[0]?.key?.asString() ?? '';
+    val list = item.tag?.Aspects?.asList();
+    return !isNull(list) && list.length > 0
+      ? list[0]?.key?.asString() ?? ''
+      : '';
   };
   val getAspectAmount = function (item as IItemStack) as int {
-    val amount = item.tag?.Aspects[0]?.amount?.asInt();
-    return isNull(amount) ? -1 : amount;
+    val list = item.tag?.Aspects?.asList();
+    return !isNull(list) && list.length > 0
+      ? list[0]?.amount?.asInt() ?? -1
+      : -1;
   };
 
   val aspects = extractByTag(grid, getAspectKey, getAspectAmount);
