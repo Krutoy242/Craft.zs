@@ -100,6 +100,14 @@ craft.remake(<tconstruct:tooltables:2>, [" p", " ≠"], ingrs);
 craft.remake(<tconstruct:tooltables>, ["w"], ingrs);
 ```
 
+**Oredict blacklist** — unwanted oredict entries can be hidden from the output.  
+Configure in `scripts/_init/craft.zs`:
+```zs
+serialize.oreBlacklist.add('redstone');    // hides <ore:redstone>
+serialize.oreBlacklist.add('machineCase'); // hides <ore:machineCase>
+```
+Now redstone outputs as `<ore:dustRedstone>` instead of `<ore:dustRedstone> | <ore:redstone>`.
+
 
 ### Advanced Ingredients
 

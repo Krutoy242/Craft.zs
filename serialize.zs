@@ -10,6 +10,8 @@ import crafttweaker.liquid.ILiquidStack;
 import crafttweaker.oredict.IOreDictEntry;
 
 zenClass Serialize {
+  static oreBlacklist as [string] = [] as [string];
+
   zenConstructor() { }
 
   function     wrap(s as string, wraps as string) as string { return wraps[0] ~ s ~ wraps[1]; }
@@ -41,6 +43,16 @@ zenClass Serialize {
   }
 
   function IIngredient(a as IIngredient) as string { return a?.commandString ?? 'null'; }
+
+  function filterOres(ores as crafttweaker.oredict.IOreDictEntry[]) as [crafttweaker.oredict.IOreDictEntry] {
+    if (isNull(ores) || oreBlacklist.length == 0) return ores;
+    val result = [] as [crafttweaker.oredict.IOreDictEntry];
+    for ore in ores {
+      if (!(oreBlacklist has ore.name)) result.add(ore);
+    }
+    return result;
+  }
+
   function IIngredient(a as crafttweaker.item.IIngredient, style as string[]) as string {
     if (a.itemArray.length != 1) return IIngredient(a);
 
@@ -53,7 +65,7 @@ zenClass Serialize {
 
     if (style has 'noOre') return IItemStack(itemStack);
 
-    val ores = itemStack.ores;
+    val ores = filterOres(itemStack.ores);
     if (!isNull(ores) && ores.length > 0) {
       val first = itemStack.amount > 1 ? ores[0] * itemStack.amount : ores[0];
       if (ores.length == 1 || style has 'firstOre') return IIngredient(first);
